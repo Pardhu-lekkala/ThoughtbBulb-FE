@@ -1,0 +1,18 @@
+.mozspinner {
+  margin-left:3vw;
+  width: 10px;
+  height: 3px;
+  border-radius: 25%;
+  background: blue;
+  position: relative;
+  animation: moz 0.19s infinite linear alternate;
+}
+
+@keyframes moz {
+  from {
+    left: 0px;
+  }
+  to {
+    left: 25px;
+  }
+}
