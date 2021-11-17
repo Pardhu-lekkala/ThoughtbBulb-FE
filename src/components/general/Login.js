@@ -18,16 +18,23 @@ import Box from "@material-ui/core/Box";
 
 function LinearProgressWithLabel(props) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }} style={{
-      position: "absolute",
-      left: "45%",
-      top: "35%",
-      zIndex: 1000,
-      height: "150px",
-      width: "250px",
-    }}>
+    <Box
+      sx={{ display: "flex", alignItems: "center" }}
+      style={{
+        position: "absolute",
+        left: "45%",
+        top: "35%",
+        zIndex: 1000,
+        height: "150px",
+        width: "250px",
+      }}
+    >
       <Box sx={{ width: "100%", mr: 1 }}>
-        <LinearProgress style={{height:"10px"}} variant="determinate" {...props} />
+        <LinearProgress
+          style={{ height: "10px" }}
+          variant="determinate"
+          {...props}
+        />
       </Box>
       <Box sx={{ minWidth: 35 }}>
         <Typography variant="body2" color="text.secondary">{`${Math.round(
@@ -59,7 +66,6 @@ function LinearWithValueLabel() {
   );
 }
 
-
 function Login({ history, match, project, startSetProject }) {
   const classes = useStyles();
 
@@ -68,27 +74,26 @@ function Login({ history, match, project, startSetProject }) {
   const [LoginSignupTransitionMP4, setLoginSignupTransition] =
     React.useState(null);
 
-    function validation(){
-      let email= document.getElementById('email').value;
-      let form= document.getElementById('form');
-      let text= document.getElementById('text');
-      let pattern=/^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-      console.log(email);
-         
-      if(email.match(pattern)){
-        form.classList.add("valid");
-        form.classList.remove("invalid");
-        // text.innerHTML="Your Email is valid";
-        // text.style.color="green";
-        setVideoNo(1);
-      }
-      else{
-        form.classList.remove("valid");
-        form.classList.add("invalid");
-        text.innerHTML="please enter a valid email";
-        text.style.color="red";
-      }
+  function validation() {
+    let email = document.getElementById("email").value;
+    let form = document.getElementById("form");
+    let text = document.getElementById("text");
+    let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    console.log(email);
+
+    if (email.match(pattern)) {
+      form.classList.add("valid");
+      form.classList.remove("invalid");
+      // text.innerHTML="Your Email is valid";
+      // text.style.color="green";
+      setVideoNo(1);
+    } else {
+      form.classList.remove("valid");
+      form.classList.add("invalid");
+      text.innerHTML = "please enter a valid email";
+      text.style.color = "red";
     }
+  }
 
   React.useEffect(() => {
     (async () => {
@@ -124,20 +129,16 @@ function Login({ history, match, project, startSetProject }) {
         });
 
       axios
-        .get(
-          //`https://platoodemo.s3.ap-south-1.amazonaws.com/assets/LoginSignupTransition.mp4`,
-          `${project.transVideo.url}`,
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods":
-                "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-              "Access-Control-Allow-Headers":
-                "Origin, Content-Type, X-Auth-Token",
-            },
-            responseType: "blob",
-          }
-        )
+        .get(`${project.transVideo.url}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":
+              "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers":
+              "Origin, Content-Type, X-Auth-Token",
+          },
+          responseType: "blob",
+        })
         .then((response) => {
           const URL = window.URL || window.webkitURL;
           const url = URL.createObjectURL(
@@ -151,7 +152,7 @@ function Login({ history, match, project, startSetProject }) {
   return (
     <>
       {LoginSignupLoopMP4 === null || LoginSignupTransitionMP4 === null ? (
-       <LinearWithValueLabel />
+        <LinearWithValueLabel />
       ) : (
         <>
           <video autoPlay muted loop className={classes.LoginSignupLoop}>
@@ -159,71 +160,75 @@ function Login({ history, match, project, startSetProject }) {
             Your browser does not support HTML5 video.
           </video>
           <header className={classes.viewportHeader}>
-          <form class="form" action="#" id="form">
-            <Grid container spacing={4} style={{ margin: "170px 70px" }}>
-              <Grid item xs={12}>
-                <TextField
-                   id="email"
-                   name="email"
-                   label="Email"
-                   type="Email"
-                   required
-                   variant="outlined"
-                   style={{ color: "black", backgroundColor: "white" }}
-                   onClick={
-                     ()=>{
-                       let text= document.getElementById('text');
-                       text.innerHTML="";
-                     }
-                   }
-                   
-                />
-              </Grid>
-              <span id="text" style={{fontWeight:"bolder", backgroundColor:"white", marginLeft:"20px"}}>
-                </span>
-              <Grid item xs={12}>
-                <Button className="loginbtn"
-                  variant="contained"
-                  style={{
-                    color: project.secondaryColor,
-                    backgroundColor: project.primaryColor,
-                    borderRadius:"15px"
-                  }}
-                  onClick={() => validation()}
-                >
-                  Login
-                  <CircularProgress
-                    style={{
-                      display: videoNo === 1 ? "block" : "none",
-                      width: "16px",
-                      height: "16px",
-                      marginLeft: "20px",
-                      color: project.secondaryColor,
+            <form class="form" action="#" id="form">
+              <Grid container spacing={4} style={{ margin: "170px 70px" }}>
+                <Grid item xs={12}>
+                  <TextField
+                    id="email"
+                    name="email"
+                    label="Email"
+                    type="Email"
+                    required
+                    variant="outlined"
+                    style={{ color: "black", backgroundColor: "white" }}
+                    onClick={() => {
+                      let text = document.getElementById("text");
+                      text.innerHTML = "";
                     }}
                   />
-                </Button>
+                </Grid>
+                <span
+                  id="text"
+                  style={{
+                    fontWeight: "bolder",
+                    backgroundColor: "white",
+                    marginLeft: "20px",
+                  }}
+                ></span>
+                <Grid item xs={12}>
+                  <Button
+                    className="loginbtn"
+                    variant="contained"
+                    style={{
+                      color: project.secondaryColor,
+                      backgroundColor: project.primaryColor,
+                      borderRadius: "15px",
+                    }}
+                    onClick={() => validation()}
+                  >
+                    Login
+                    <CircularProgress
+                      style={{
+                        display: videoNo === 1 ? "block" : "none",
+                        width: "16px",
+                        height: "16px",
+                        marginLeft: "20px",
+                        color: project.secondaryColor,
+                      }}
+                    />
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
             </form>
           </header>
 
           {videoNo === 1 && (
             <>
-            <ReactPlayer
-              url={LoginSignupTransitionMP4}
-              autoPlay={true}
-              playing={true}
-              //muted={true}
-              controls={false}
-              width="100%"
-              height="auto"
-              className={classes.LoginSignupLoop}
-              onEnded={() => {
-                history.push("/Lobby");
-              }}
-              style={{ zIndex: videoNo === 1 ? 100 : "" }}
-            />
-            <Button
+              <ReactPlayer
+                url={LoginSignupTransitionMP4}
+                autoPlay={true}
+                playing={true}
+                //muted={true}
+                controls={false}
+                width="100%"
+                height="auto"
+                className={classes.LoginSignupLoop}
+                onEnded={() => {
+                  history.push("/Lobby");
+                }}
+                style={{ zIndex: videoNo === 1 ? 100 : "" }}
+              />
+              <Button
                 id="skipbtn"
                 style={{
                   color: `${project.secondaryColor}`,
@@ -232,7 +237,7 @@ function Login({ history, match, project, startSetProject }) {
                   top: "15px",
                   right: "15px",
                   zIndex: "200",
-                  borderRadius:"15px"
+                  borderRadius: "15px",
                 }}
                 onClick={
                   (() => setVideoNo(0),

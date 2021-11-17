@@ -112,8 +112,7 @@ function Lobby({ history, project }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   let icon = 0;
-  let pageLoaded=true;
-  
+  let pageLoaded = true;
 
   return (
     <>
@@ -133,113 +132,125 @@ function Lobby({ history, project }) {
         <>
           {/* {console.log(page.markers)} */}
           {page.markers.map((item, index) => {
-            if(item.VisibileLabel){return (
-              <>
-              <Tooltip key={index} title={item.markerLabel} placement="top" arrow open={true}>
-                <span
-                  className={classes.pulseAnimation}
-                  style={{
-                    backgroundColor: project.markerColor,
-                    position: "relative",
+            if (item.VisibileLabel) {
+              return (
+                <>
+                  <Tooltip
+                    key={index}
+                    title={item.markerLabel}
+                    placement="top"
+                    arrow
+                    open={true}
+                  >
+                    <span
+                      className={classes.pulseAnimation}
+                      style={{
+                        backgroundColor: project.markerColor,
+                        position: "relative",
 
-                    top: updatePointer2(
-                      +item?.markerPosition?.split(",")[0],
-                      +item?.markerPosition?.split(",")[1],
-                      page?.backgroundImage?.width,
-                      page?.backgroundImage?.height
-                    ).top,
+                        top: updatePointer2(
+                          +item?.markerPosition?.split(",")[0],
+                          +item?.markerPosition?.split(",")[1],
+                          page?.backgroundImage?.width,
+                          page?.backgroundImage?.height
+                        ).top,
 
-                    left: updatePointer2(
-                      +item?.markerPosition?.split(",")[0],
-                      +item?.markerPosition?.split(",")[1],
-                      //320,574, //funzone
-                      // 652, 530, //beach
-                      //946, 614, //helpdesk
-                      page?.backgroundImage?.width,
-                      page?.backgroundImage?.height
-                    ).left,
-                  }}
-                  onClick={() => {
-                    let scrollDown = document.getElementById("profile-menu");
-                    scrollDown.style.display = "none";
-                    if(item.destinationType!="Link")
-                    {
-                    item.TransVideo
-                      ? setVideoNo({
-                          no: 1,
-                          src: item.TransVideo.url,
-                          pageId: item.destinationPage,
-                        })
-                      : console.log("No Transition Video");
-                    }
-                    else{
-                      window.open(item.destinationLink);
-                    }
-                  }}
-                ></span>
-              </Tooltip>
-               <video
-               src={item.TransVideo ? item.TransVideo.url : ""}
-               preload="auto"
-               style={{ display: "none" }}
-             />
-             </>
-            );}
-            else{
-            return (
-              <>
-              <Tooltip key={index} title={item.markerLabel} placement="top" arrow leaveDelay={300} TransitionComponent={Fade}
-              TransitionProps={{ timeout: 400 }}  >
-                <span
-                  className={classes.pulseAnimation}
-                  style={{
-                    backgroundColor: project.markerColor,
-                    position: "relative",
-
-                    top: updatePointer2(
-                      +item?.markerPosition?.split(",")[0],
-                      +item?.markerPosition?.split(",")[1],
-                      page?.backgroundImage?.width,
-                      page?.backgroundImage?.height
-                    ).top,
-
-                    left: updatePointer2(
-                      +item?.markerPosition?.split(",")[0],
-                      +item?.markerPosition?.split(",")[1],
-                      //320,574, //funzone
-                      // 652, 530, //beach
-                      //946, 614, //helpdesk
-                      page?.backgroundImage?.width,
-                      page?.backgroundImage?.height
-                    ).left,
-                  }}
-                  onClick={() => {
-                    let scrollDown = document.getElementById("profile-menu");
-                    scrollDown.style.display = "none";
-                    if(item.destinationType!="Link")
-                    {
-                    item.TransVideo
-                      ? setVideoNo({
-                          no: 1,
-                          src: item.TransVideo.url,
-                          pageId: item.destinationPage,
-                        })
-                      : console.log("No Transition Video");
-                    }
-                    else{
-                      window.open(item.destinationLink);
-                    }
-                  }}
-                ></span>
-              </Tooltip>
-              <video
-                  src={item.TransVideo ? item.TransVideo.url : ""}
-                  preload="auto"
-                  style={{ display: "none" }}
-                />
+                        left: updatePointer2(
+                          +item?.markerPosition?.split(",")[0],
+                          +item?.markerPosition?.split(",")[1],
+                          //320,574, //funzone
+                          // 652, 530, //beach
+                          //946, 614, //helpdesk
+                          page?.backgroundImage?.width,
+                          page?.backgroundImage?.height
+                        ).left,
+                      }}
+                      onClick={() => {
+                        let scrollDown =
+                          document.getElementById("profile-menu");
+                        scrollDown.style.display = "none";
+                        if (item.destinationType != "Link") {
+                          item.TransVideo
+                            ? setVideoNo({
+                                no: 1,
+                                src: item.TransVideo.url,
+                                pageId: item.destinationPage,
+                              })
+                            : console.log("No Transition Video");
+                        } else {
+                          window.open(item.destinationLink);
+                        }
+                      }}
+                    ></span>
+                  </Tooltip>
+                  <video
+                    src={item.TransVideo ? item.TransVideo.url : ""}
+                    preload="auto"
+                    style={{ display: "none" }}
+                  />
                 </>
-              
-            );}
+              );
+            } else {
+              return (
+                <>
+                  <Tooltip
+                    key={index}
+                    title={item.markerLabel}
+                    placement="top"
+                    arrow
+                    leaveDelay={300}
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 400 }}
+                  >
+                    <span
+                      className={classes.pulseAnimation}
+                      style={{
+                        backgroundColor: project.markerColor,
+                        position: "relative",
+
+                        top: updatePointer2(
+                          +item?.markerPosition?.split(",")[0],
+                          +item?.markerPosition?.split(",")[1],
+                          page?.backgroundImage?.width,
+                          page?.backgroundImage?.height
+                        ).top,
+
+                        left: updatePointer2(
+                          +item?.markerPosition?.split(",")[0],
+                          +item?.markerPosition?.split(",")[1],
+                          //320,574, //funzone
+                          // 652, 530, //beach
+                          //946, 614, //helpdesk
+                          page?.backgroundImage?.width,
+                          page?.backgroundImage?.height
+                        ).left,
+                      }}
+                      onClick={() => {
+                        let scrollDown =
+                          document.getElementById("profile-menu");
+                        scrollDown.style.display = "none";
+                        if (item.destinationType != "Link") {
+                          item.TransVideo
+                            ? setVideoNo({
+                                no: 1,
+                                src: item.TransVideo.url,
+                                pageId: item.destinationPage,
+                              })
+                            : console.log("No Transition Video");
+                        } else {
+                          window.open(item.destinationLink);
+                        }
+                      }}
+                    ></span>
+                  </Tooltip>
+                  <video
+                    src={item.TransVideo ? item.TransVideo.url : ""}
+                    preload="auto"
+                    style={{ display: "none" }}
+                  />
+                </>
+              );
+            }
           })}
           <div
             id="profile-menu"
@@ -261,14 +272,13 @@ function Lobby({ history, project }) {
               <div id="collapsible1" style={{ display: "none" }}>
                 {project.pages.map((item) => (
                   <div class="collapsible-container">
-                    <div 
+                    <div
                       class="content"
                       style={{
                         background: "rgb(255, 255, 255)",
                         maxHeight: "547px",
-                        display: item.id==project.homepage?"none":"block"
+                        display: item.id == project.homepage ? "none" : "block",
                       }}
-                      
                     >
                       <div class="icon-links">
                         <div
@@ -279,9 +289,8 @@ function Lobby({ history, project }) {
                           <a
                             id="link"
                             onClick={() => {
-                                history.push(`/page/${item.id}`);
+                              history.push(`/page/${item.id}`);
                             }}
-                            
                           >
                             <img
                               class="img-100"
@@ -350,7 +359,7 @@ function Lobby({ history, project }) {
               top: "15px",
               right: "15px",
               zIndex: "2000",
-              borderRadius:"15px"
+              borderRadius: "15px",
             }}
             onClick={
               (() => setVideoNo(0),
