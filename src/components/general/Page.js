@@ -1,19 +1,27 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
+import "../../styles/componentStyles/lobby.css";
 import useStyles from "./useStylesPage";
 import { BiArrowBack } from "react-icons/bi";
-
+import { BsChevronCompactDown } from "react-icons/bs";
+import { HiOutlineUser } from "react-icons/hi";
+import Tooltip from "@material-ui/core/Tooltip";
 import useWindowDimensions from "./useWindowDimensions";
 
 import ReactPlayer from "react-player";
 
-function Page({ history, match, pages, primaryColor, secondaryColor }) {
+function Page({ history, match, project }) {
+  // console.log(history);
+  const pages = project.pages;
+  const primaryColor = project.primaryColor;
+  const secondaryColor = project.secondaryColor;
   const classes = useStyles();
 
   //const scrollRef = React.useRef(null);
 
   const [page, setPage] = React.useState(null);
+  
 
   function updatePointer(makrw1, makrh1, makrw2, makrh2, imagew, imageh) {
     let width = Math.max(
@@ -31,8 +39,8 @@ function Page({ history, match, pages, primaryColor, secondaryColor }) {
 
     // console.log(width + " screen width " + height);
 
-    console.clear();
-    console.log(width, height);
+    // console.clear();
+    // console.log(width, height);
 
     const neww1 = (makrw1 / imagew) * width;
     const newh1 = (makrh1 / imageh) * height;
@@ -47,7 +55,7 @@ function Page({ history, match, pages, primaryColor, secondaryColor }) {
       X2: `${(obj.X2 ^ 0) - 12}px`,
     };
 
-    console.log(coordinates);
+    // console.log(coordinates);
 
     //<div class="marker1" style="position: absolute; top: 86px; left: 673px; width: 10px; height: 10px; background: rgb(255, 0, 0);"></div>
 
@@ -95,25 +103,124 @@ function Page({ history, match, pages, primaryColor, secondaryColor }) {
     // window.scrollTo(0, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  let icon = 0;
+  let loginCredentials=localStorage.getItem("email");
+  console.log(loginCredentials)
 
   return (
     <>
+      <div
+        id="profile-menu"
+        class="profile-menu"
+        style={{ background: "#ffffff", right: "60px" }}
+      >
+        <div class="profile-menu-header">
+        <Tooltip
+             title={
+              <b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>
+            }
+            placement="left"
+             >
+          <a
+            id="profile-menu-user"
+            class="profile-menu-user"
+            href="javascript:void(0);"
+          >
+            <HiOutlineUser
+              size={50}
+              color="black"
+              style={{ paddingTop: "5px" }}
+            />
+          </a>
+          </Tooltip>
+          <div id="collapsible1" style={{ display: "none" }}>
+            <div class="spacer" style={{ backgroundColor: "#5b5b5b" }}></div>
+            {pages.map((item) => (
+              <div class="collapsible-container">
+                <div
+                  class="content"
+                  style={{
+                    background: "rgb(255, 255, 255)",
+                    maxHeight: "547px",
+                    // display: item.id == project.homepage||item.id==match.params.pageId ? "none" : "block",
+                  }}
+                >
+                  <div class="icon-links">
+                    <div style={{ backgroundColor: "#5b5b5b" }}></div>
+                    <div>
+                      <a
+                        id="link"
+                        onClick={() => {
+                          if(item.id == project.homepage){
+                            history.push(`/lobby`)
+                          }
+                          else if(item.id==match.params.pageId)
+                          {
+                            alert(`already in ${item.pageName}`)
+                          }
+                          else{
+                          history.push(`/page/${item.id}`);
+                          window.location.reload(); 
+                          }
+                          // console.log("this is the one", history);
+                        }}
+                      >
+                        <img
+                          class="img-100"
+                          src={item.pageIcon.url}
+                          alt={item.pageName}
+                        />
+                        <span style={{ color: item.id == match.params.pageId  ? "red" : "black", fontWeight:"bold" }}>{item.pageName}</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div
+            class="collapsible bounce"
+            style={{
+              background: "rgb(255, 255, 255)",
+              padding: "5px 0px 2px 0px",
+              textAlign: "center",
+            }}
+            onClick={() => {
+              let arrow = document.getElementById("collapsible1");
+              let down = document.getElementById("down");
+              if (icon == 0) {
+                arrow.style.display = "block";
+                icon++;
+                down.style.transform = "rotate(180deg)";
+              } else {
+                arrow.style.display = "none";
+                icon--;
+                down.style.transform = "rotate(0deg)";
+              }
+            }}
+          >
+            <BsChevronCompactDown size={25} id="down" />
+          </div>
+        </div>
+      </div>
       {page && (
         <>
           <Button
-        style={{
-          top: "20px",
-          left: "20px",
-          position:"absolute",
-          zIndex: "2300",
-          color: `${secondaryColor}`,
-          backgroundColor: `${primaryColor}`,
-          borderRadius:"15px"
-        }}
-        onClick={() => {history.push("/Lobby");}}
-      >
-      <BiArrowBack size={25} />
-      </Button>
+            style={{
+              top: "20px",
+              left: "20px",
+              position: "absolute",
+              zIndex: "2300",
+              color: `${secondaryColor}`,
+              backgroundColor: `${primaryColor}`,
+              borderRadius: "15px",
+            }}
+            onClick={() => {
+              history.push("/Lobby");
+            }}
+          >
+            <BiArrowBack size={25} />
+          </Button>
           <video
             poster={page?.backgroundImage?.url}
             className={classes.pageBG}
@@ -158,7 +265,8 @@ function Page({ history, match, pages, primaryColor, secondaryColor }) {
   );
 }
 
-const mapStateToProps = (state) => ({ pages: state.project.pages, primaryColor:state.project.primaryColor, secondaryColor:state.project.secondaryColor });
+const mapStateToProps = (state) => ({ project: state.project });
+// const mapStateToProps = (state) => ({ pages: state.project.pages, primaryColor:state.project.primaryColor, secondaryColor:state.project.secondaryColor });
 
 const mapDispatchToProps = {};
 

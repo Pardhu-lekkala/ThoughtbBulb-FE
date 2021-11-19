@@ -5,8 +5,22 @@ import "../../styles/componentStyles/lobby.css";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import { BsChevronCompactDown } from "react-icons/bs";
+import { HiOutlineUser } from "react-icons/hi";
 import useWindowDimensions from "./useWindowDimensions";
 import Fade from "@material-ui/core/Fade";
+import { withStyles } from "@material-ui/core/styles";
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Paper from "@material-ui/core/Paper";
+import Draggable from "react-draggable";
+import { ColorizeOutlined } from "@material-ui/icons";
+
+// import { withStyles, makeStyles } from '@material-ui/core/styles';
+// import Typography from '@material-ui/core/Typography';
 
 /* function updatePointer(windowWidth, windowHeight, image, target) {
   // Get largest dimension increase
@@ -33,6 +47,16 @@ import Fade from "@material-ui/core/Fade";
     left: `${target.x * scale + xOffset}px`,
   };
 } */
+function PaperComponent(props) {
+  return (
+    <Draggable
+      handle="#draggable-dialog-title"
+      cancel={'[class*="MuiDialogContent-root"]'}
+    >
+      <Paper {...props} />
+    </Draggable>
+  );
+}
 
 function updatePointer2(makrw, makrh, imagew, imageh) {
   let width = Math.max(
@@ -43,12 +67,6 @@ function updatePointer2(makrw, makrh, imagew, imageh) {
     document.documentElement.clientHeight,
     window.innerHeight || 0
   );
-  //let imagew = 1920;
-  //let imageh = 1080;
-  //console.log(imagew, imageh)
-  // console.log(makrw, makrh);
-
-  // console.log(width + " screen width " + height);
 
   // console.clear();
   console.log(width, height);
@@ -67,11 +85,25 @@ function updatePointer2(makrw, makrh, imagew, imageh) {
     left: `${(obj.X ^ 0) - radiusw}px`,
   };
 }
-
+// function color(id){
+//   console.log("jhbjvjvjvjjvvj",id);
+// }
 function Lobby({ history, project }) {
   const page = project.pages.find((e) => e.id === project.homepage);
   const classes = useStyles();
-  // const [tooltipIsOpen, setTooltipIsOpen] = React.useState(false);
+  const [tooltipIsOpen, setTooltipIsOpen] = React.useState(true);
+  const [LabelIsOpen, setLabelIsOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+    setLabelIsOpen(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setLabelIsOpen(true);
+  };
 
   const [videoNo, setVideoNo] = React.useState({
     no: 0,
@@ -87,6 +119,8 @@ function Lobby({ history, project }) {
   // The size of the BG // It will be updated later
   const [BGwidth, setBGWidth] = React.useState();
   const [BGheight, setBGHeight] = React.useState();
+  const [url, setUrl] = React.useState("");
+  const [isHover, setIsHover] = React.useState(false);
 
   // This function calculates width and height of the BG
   const getBGSize = () => {
@@ -95,7 +129,6 @@ function Lobby({ history, project }) {
 
     const newHeight = BGRef.current.clientHeight;
     setBGHeight(newHeight);
-    //console.log("CALCULATING NEW DIM.", { width: newWidth, height: newHeight });
   };
 
   // Get 'width' and 'height' after the initial render and every time the window height/width changes
@@ -103,16 +136,26 @@ function Lobby({ history, project }) {
     getBGSize();
   }, [height, width]);
 
-  //const scrollRef = React.useRef(null);
+  let setShowIcon = false;
 
-  React.useEffect(() => {
-    //getBGSize();
-    // console.log(page);
-    // window.scrollTo(0, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  let icon = 0;
-  let pageLoaded = true;
+  function tooltip() {
+    setTimeout(function () {
+      setTooltipIsOpen(false);
+    }, 5000);
+  }
+  tooltip();
+
+  const NewTooltip = withStyles({
+    tooltip: {
+      color: project.primaryColor,
+      backgroundColor: project.secondaryColor,
+    },
+    arrow: {
+      color: project.secondaryColor,
+    },
+  })(Tooltip);
+  let loginCredentials=localStorage.getItem("email");
+  console.log(loginCredentials)
 
   return (
     <>
@@ -130,58 +173,87 @@ function Lobby({ history, project }) {
 
       <header className={classes.viewportHeader}>
         <>
-          {/* {console.log(page.markers)} */}
           {page.markers.map((item, index) => {
             if (item.VisibileLabel) {
               return (
                 <>
                   <Tooltip
                     key={index}
-                    title={item.markerLabel}
+                    title={
+                      <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                    }
                     placement="top"
                     arrow
-                    open={true}
+                    open={LabelIsOpen}
                   >
-                    <span
-                      className={classes.pulseAnimation}
-                      style={{
-                        backgroundColor: project.markerColor,
-                        position: "relative",
+                    <NewTooltip
+                      key={index}
+                      title={
+                        <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                      }
+                      placement="top"
+                      arrow
+                    >
+                      <span
+                        className={classes.pulseAnimation}
+                        id={index}
+                        // onMouseEnter={() => {
+                          // setIsHover(true);
+                          // color({index});
+                          // color(this.id)
+                          // this.style.background="yellow";
+                        // }}
+                        // onMouseLeave={() => {
+                          // setIsHover(false);
+                          // Colorout(this.index)
+                          // this.style.background="red"
+                        // }}
+                        style={{
+                          backgroundColor: isHover
+                            ? project.primaryColor
+                            : project.markerColor,
+                          position: "relative",
 
-                        top: updatePointer2(
-                          +item?.markerPosition?.split(",")[0],
-                          +item?.markerPosition?.split(",")[1],
-                          page?.backgroundImage?.width,
-                          page?.backgroundImage?.height
-                        ).top,
+                          top: updatePointer2(
+                            +item?.markerPosition?.split(",")[0],
+                            +item?.markerPosition?.split(",")[1],
+                            page?.backgroundImage?.width,
+                            page?.backgroundImage?.height
+                          ).top,
 
-                        left: updatePointer2(
-                          +item?.markerPosition?.split(",")[0],
-                          +item?.markerPosition?.split(",")[1],
-                          //320,574, //funzone
-                          // 652, 530, //beach
-                          //946, 614, //helpdesk
-                          page?.backgroundImage?.width,
-                          page?.backgroundImage?.height
-                        ).left,
-                      }}
-                      onClick={() => {
-                        let scrollDown =
-                          document.getElementById("profile-menu");
-                        scrollDown.style.display = "none";
-                        if (item.destinationType != "Link") {
-                          item.TransVideo
-                            ? setVideoNo({
-                                no: 1,
-                                src: item.TransVideo.url,
-                                pageId: item.destinationPage,
-                              })
-                            : console.log("No Transition Video");
-                        } else {
-                          window.open(item.destinationLink);
-                        }
-                      }}
-                    ></span>
+                          left: updatePointer2(
+                            +item?.markerPosition?.split(",")[0],
+                            +item?.markerPosition?.split(",")[1],
+                            //320,574, //funzone
+                            // 652, 530, //beach
+                            //946, 614, //helpdesk
+                            page?.backgroundImage?.width,
+                            page?.backgroundImage?.height
+                          ).left,
+                        }}
+                        onClick={() => {
+                          if (item.destinationType == "PDF") {
+                            setUrl(item.destinationLink);
+                            handleClickOpen();
+                          } else if (item.destinationType == "Link") {
+                            window.open(item.destinationLink);
+                          } else {
+                            let scrollDown =
+                              document.getElementById("profile-menu");
+                            scrollDown.style.display = "none";
+                            setLabelIsOpen(false);
+                            setTooltipIsOpen(false);
+                            item.TransVideo
+                              ? setVideoNo({
+                                  no: 1,
+                                  src: item.TransVideo.url,
+                                  pageId: item.destinationPage,
+                                })
+                              : console.log("No Transition Video");
+                          }
+                        }}
+                      ></span>
+                    </NewTooltip>
                   </Tooltip>
                   <video
                     src={item.TransVideo ? item.TransVideo.url : ""}
@@ -195,53 +267,84 @@ function Lobby({ history, project }) {
                 <>
                   <Tooltip
                     key={index}
-                    title={item.markerLabel}
+                    title={
+                      <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                    }
                     placement="top"
                     arrow
                     leaveDelay={300}
                     TransitionComponent={Fade}
                     TransitionProps={{ timeout: 400 }}
+                    open={tooltipIsOpen}
                   >
-                    <span
-                      className={classes.pulseAnimation}
-                      style={{
-                        backgroundColor: project.markerColor,
-                        position: "relative",
+                    <NewTooltip
+                      key={index}
+                      title={
+                        <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                      }
+                      placement="top"
+                      arrow
+                      leaveDelay={300}
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 400 }}
+                    >
+                      <span
+                        id={index}
+                        className={classes.pulseAnimation}
+                        // onMouseEnter={() => {
+                        //   setIsHover(true);
+                        // }}
+                        // onMouseLeave={() => {
+                          
+                        //   setIsHover(false);
+                        // }}
+                        style={{
+                          backgroundColor: isHover
+                            ? project.primaryColor
+                            : project.markerColor,
+                          position: "relative",
 
-                        top: updatePointer2(
-                          +item?.markerPosition?.split(",")[0],
-                          +item?.markerPosition?.split(",")[1],
-                          page?.backgroundImage?.width,
-                          page?.backgroundImage?.height
-                        ).top,
+                          top: updatePointer2(
+                            +item?.markerPosition?.split(",")[0],
+                            +item?.markerPosition?.split(",")[1],
+                            page?.backgroundImage?.width,
+                            page?.backgroundImage?.height
+                          ).top,
 
-                        left: updatePointer2(
-                          +item?.markerPosition?.split(",")[0],
-                          +item?.markerPosition?.split(",")[1],
-                          //320,574, //funzone
-                          // 652, 530, //beach
-                          //946, 614, //helpdesk
-                          page?.backgroundImage?.width,
-                          page?.backgroundImage?.height
-                        ).left,
-                      }}
-                      onClick={() => {
-                        let scrollDown =
-                          document.getElementById("profile-menu");
-                        scrollDown.style.display = "none";
-                        if (item.destinationType != "Link") {
-                          item.TransVideo
-                            ? setVideoNo({
-                                no: 1,
-                                src: item.TransVideo.url,
-                                pageId: item.destinationPage,
-                              })
-                            : console.log("No Transition Video");
-                        } else {
-                          window.open(item.destinationLink);
-                        }
-                      }}
-                    ></span>
+                          left: updatePointer2(
+                            +item?.markerPosition?.split(",")[0],
+                            +item?.markerPosition?.split(",")[1],
+                            //320,574, //funzone
+                            // 652, 530, //beach
+                            //946, 614, //helpdesk
+                            page?.backgroundImage?.width,
+                            page?.backgroundImage?.height
+                          ).left,
+                        }}
+                        onClick={() => {
+                          let scrollDown =
+                            document.getElementById("profile-menu");
+                          scrollDown.style.display = "none";
+                          if (item.destinationType == "PDF") {
+                            document.getElementById(
+                              "modalContent"
+                            ).style.display = "block";
+                          } else if (item.destinationType == "link") {
+                            window.open(item.destinationLink);
+                          } else {
+                            setLabelIsOpen(false);
+                            setTooltipIsOpen(false);
+                            item.TransVideo
+                              ? setVideoNo({
+                                  no: 1,
+                                  src: item.TransVideo.url,
+                                  pageId: item.destinationPage,
+                                })
+                              : console.log("No Transition Video");
+                          }
+                        }}
+                      ></span>
+                    </NewTooltip>
                   </Tooltip>
                   <video
                     src={item.TransVideo ? item.TransVideo.url : ""}
@@ -252,24 +355,67 @@ function Lobby({ history, project }) {
               );
             }
           })}
+          <div>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              PaperComponent={PaperComponent}
+              aria-labelledby="draggable-dialog-title"
+            >
+              <DialogTitle
+                style={{ cursor: "move" }}
+                id="draggable-dialog-title"
+              >
+                **** COMPANY NAME ****
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  <iframe
+                    src={url}
+                    style={{ width: "40vw", height: "60vh" }}
+                    frameborder="0"
+                  ></iframe>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button autoFocus onClick={handleClose} color="primary">
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+
           <div
             id="profile-menu"
             class="profile-menu"
             style={{ background: "#ffffff", right: "60px" }}
           >
+            
             <div class="profile-menu-header">
+            <Tooltip
+             title={
+              <b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>
+            }
+            placement="left"
+             >
               <a
                 id="profile-menu-user"
                 class="profile-menu-user"
                 href="javascript:void(0);"
               >
-                <img
-                  class="img-100 user-profile"
-                  src="https://conference-project-db.s3.amazonaws.com/1628761365_102a0529e9.png"
-                  alt="User profile"
+                <HiOutlineUser
+                  class="resizeicon"
+                  size="70%"
+                  color="black"
+                  style={{ paddingTop: "1vh" }}
                 />
               </a>
+              </Tooltip>
               <div id="collapsible1" style={{ display: "none" }}>
+                <div
+                  class="spacer"
+                  style={{ backgroundColor: "#5b5b5b" }}
+                ></div>
                 {project.pages.map((item) => (
                   <div class="collapsible-container">
                     <div
@@ -277,19 +423,20 @@ function Lobby({ history, project }) {
                       style={{
                         background: "rgb(255, 255, 255)",
                         maxHeight: "547px",
-                        display: item.id == project.homepage ? "none" : "block",
                       }}
                     >
                       <div class="icon-links">
-                        <div
-                          class="spacer"
-                          style={{ backgroundColor: "#5b5b5b" }}
-                        ></div>
+                        <div style={{ backgroundColor: "#5b5b5b" }}></div>
                         <div>
                           <a
                             id="link"
                             onClick={() => {
-                              history.push(`/page/${item.id}`);
+                              if (item.id == project.homepage) {
+                                alert("already in lobby");
+                              } else {
+                                history.push(`/page/${item.id}`);
+                                window.location.reload();
+                              }
                             }}
                           >
                             <img
@@ -297,7 +444,15 @@ function Lobby({ history, project }) {
                               src={item.pageIcon.url}
                               alt={item.pageName}
                             />
-                            <span style={{ color: project.secondaryColor }}>
+                            <span
+                              style={{
+                                color:
+                                  item.id == project.homepage ? "red" : "black",
+                                fontWeight: "bold",
+                                fontSize: "72%",
+                                wordWrap: "break-word",
+                              }}
+                            >
                               {item.pageName}
                             </span>
                           </a>
@@ -311,25 +466,26 @@ function Lobby({ history, project }) {
                 class="collapsible bounce"
                 style={{
                   background: "rgb(255, 255, 255)",
-                  padding: "5px 0px 2px 0px",
+                  padding: "5% 35% 3%",
                   textAlign: "center",
                 }}
                 onClick={() => {
                   let arrow = document.getElementById("collapsible1");
                   let down = document.getElementById("down");
-                  if (icon == 0) {
+                  if (setShowIcon) {
                     arrow.style.display = "block";
-                    icon++;
+                    setShowIcon = false;
                     down.style.transform = "rotate(180deg)";
                   } else {
                     arrow.style.display = "none";
-                    icon--;
+                    setShowIcon = true;
                     down.style.transform = "rotate(0deg)";
                   }
                 }}
               >
-                <BsChevronCompactDown size={25} id="down" />
+                <BsChevronCompactDown class="resizeicon" size={25} id="down"  />
               </div>
+              
             </div>
           </div>
         </>
@@ -340,7 +496,6 @@ function Lobby({ history, project }) {
           <video
             poster={page?.backgroundImage?.url}
             autoPlay
-            //muted
             className={classes.transitionLoop}
             onEnded={() => {
               history.push(`/page/${videoNo.pageId}`);
@@ -376,45 +531,8 @@ function Lobby({ history, project }) {
   );
 }
 
-// const mapStateToProps = (state) => {
-//   let page = state.project.pages.find((e) => e.id === state.project.homepage);
-//   if (page) {
-//     return { page };
-//   }
-//   return { page: {} };
-// };
 const mapStateToProps = (state) => ({ project: state.project });
 
 const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
-
-/* 
-//320,574, //funzone
-//652, 530, //beach
-//946, 614, //helpdesk
-top: updatePointer(
-                      BGwidth,
-                      BGheight,
-                      {
-                        width: page?.backgroundImage?.width,
-                        height: page?.backgroundImage?.height,
-                      },
-                      {
-                        x: +item?.markerPosition?.split(",")[0],
-                        y: +item?.markerPosition?.split(",")[1],
-                      }
-                    ).top,
-                    left: updatePointer(
-                      BGwidth,
-                      BGheight,
-                      {
-                        width: page?.backgroundImage?.width,
-                        height: page?.backgroundImage?.height,
-                      },
-                      {
-                        x: +item?.markerPosition?.split(",")[0],
-                        y: +item?.markerPosition?.split(",")[1],
-                      }
-                    ).left,
-*/

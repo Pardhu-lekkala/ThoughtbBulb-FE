@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
+import { MdScreenRotation} from "react-icons/md";
+
 //import PrivateRoute from "./utils/components/PrivateRoute";
 import {
   //General
   Login,
   Lobby,
   Auditorium,
-  Page
+  Page,
 } from "./pages";
 import NotFound from "./utils/components/404";
 
@@ -49,32 +51,68 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const [isLandscape,setIsLandscape]= React.useState(true)
+  // if (window.innerHeight > window.innerWidth) {
+  //   k = true;
+  // } else {
+  //   k = false;
+  // }
+ 
+  function handleResize() {
+    if (window.innerHeight > window.innerWidth) {
+      setIsLandscape(true)
+    } else {
+            setIsLandscape(false)
+    }
+    console.log("1")
+  }
+  
   useEffect(() => {
-    //csrf();
-    //Amplify.configure(amplifyConfig);
-  }, []);
+    if (window.innerHeight > window.innerWidth) {
+      setIsLandscape(true)
+    } else {
+      
+      setIsLandscape(false)
+    }
+    window.addEventListener("resize", handleResize);
+  },[]);
 
-  return (
-    <div className="App">
-      <MuiThemeProvider theme={theme}>
-        <ClientSnackbar />
-        <BrowserRouter>
-          <Switch>
-            {/* <PrivateRoute path="/" component={Overview} exact={true} /> */}
+  if (isLandscape) {
+    return (
+      <div className="App">
+        <MuiThemeProvider theme={theme}>
+          <div style={{textAlign:"center"}}>
+          <h1 style={{ padding: "5vw" }}>
+            Please Use Your Device In LandScape Mode Only
+          </h1>
+          <MdScreenRotation size="40%" style={{marginTop:"10vh"}}/>
+          </div>
+        </MuiThemeProvider>
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+        <MuiThemeProvider theme={theme}>
+          <ClientSnackbar />
+          <BrowserRouter>
+            <Switch>
+              {/* <PrivateRoute path="/" component={Overview} exact={true} /> */}
 
-            {/* GENERAL */}
-            <Route path="/Lobby" component={Lobby} exact={true} />
-            <Route path="/Auditorium" component={Auditorium} exact={true} />
-            <Route path="/page/:pageId" component={Page} exact={true} />
-            <Route path="/:accesscode" component={Login} exact={true} />
+              {/* GENERAL */}
+              <Route path="/Lobby" component={Lobby} exact={true} />
+              <Route path="/Auditorium" component={Auditorium} exact={true} />
+              <Route path="/page/:pageId" component={Page} exact={true} />
+              <Route path="/:accesscode" component={Login} exact={true} />
 
-            {/* MISC */}
-            <Route component={NotFound} />
-          </Switch>
-        </BrowserRouter>
-      </MuiThemeProvider>
-    </div>
-  );
+              {/* MISC */}
+              <Route component={NotFound} />
+            </Switch>
+          </BrowserRouter>
+        </MuiThemeProvider>
+      </div>
+    );
+  }
 }
 
 export default App;

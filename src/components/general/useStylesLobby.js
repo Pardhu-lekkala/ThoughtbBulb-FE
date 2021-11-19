@@ -69,7 +69,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     animation: "$pulse 2s infinite",
     float: "left",
+  
   },
+
 
   "@keyframes pulse": {
     "0%": {
