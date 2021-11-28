@@ -17,6 +17,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Draggable from "react-draggable";
+import Backdrop from "@material-ui/core/Backdrop";
 import { ColorizeOutlined } from "@material-ui/icons";
 
 // import { withStyles, makeStyles } from '@material-ui/core/styles';
@@ -154,8 +155,8 @@ function Lobby({ history, project }) {
       color: project.secondaryColor,
     },
   })(Tooltip);
-  let loginCredentials=localStorage.getItem("email");
-  console.log(loginCredentials)
+  let loginCredentials = localStorage.getItem("email");
+  console.log(loginCredentials);
 
   return (
     <>
@@ -198,15 +199,15 @@ function Lobby({ history, project }) {
                         className={classes.pulseAnimation}
                         id={index}
                         // onMouseEnter={() => {
-                          // setIsHover(true);
-                          // color({index});
-                          // color(this.id)
-                          // this.style.background="yellow";
+                        // setIsHover(true);
+                        // color({index});
+                        // color(this.id)
+                        // this.style.background="yellow";
                         // }}
                         // onMouseLeave={() => {
-                          // setIsHover(false);
-                          // Colorout(this.index)
-                          // this.style.background="red"
+                        // setIsHover(false);
+                        // Colorout(this.index)
+                        // this.style.background="red"
                         // }}
                         style={{
                           backgroundColor: isHover
@@ -295,7 +296,7 @@ function Lobby({ history, project }) {
                         //   setIsHover(true);
                         // }}
                         // onMouseLeave={() => {
-                          
+
                         //   setIsHover(false);
                         // }}
                         style={{
@@ -356,25 +357,41 @@ function Lobby({ history, project }) {
             }
           })}
           <div>
+            {/* <Backdrop open={open} onClose={handleClose}>
+              <embed
+                src={url}
+                type="application/pdf"
+                height={800}
+                width={500}
+              />
+            </Backdrop> */}
             <Dialog
               open={open}
               onClose={handleClose}
               PaperComponent={PaperComponent}
               aria-labelledby="draggable-dialog-title"
+              style={{ width: "90vw", height: "90vh" }}
             >
               <DialogTitle
                 style={{ cursor: "move" }}
                 id="draggable-dialog-title"
               >
-                **** COMPANY NAME ****
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  <iframe
+                   <iframe
                     src={url}
                     style={{ width: "40vw", height: "60vh" }}
+                    //style={{ width: "90vw", height: "90vh" }}
+                    //style={{ width: "90%", height: "90%" }}
                     frameborder="0"
-                  ></iframe>
+                  ></iframe> 
+                  {/* <embed
+                    src={url}
+                    type="application/pdf"
+                    height={800}
+                    width={500}
+                  /> */}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -390,26 +407,23 @@ function Lobby({ history, project }) {
             class="profile-menu"
             style={{ background: "#ffffff", right: "60px" }}
           >
-            
             <div class="profile-menu-header">
-            <Tooltip
-             title={
-              <b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>
-            }
-            placement="left"
-             >
-              <a
-                id="profile-menu-user"
-                class="profile-menu-user"
-                href="javascript:void(0);"
+              <Tooltip
+                title={<b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>}
+                placement="left"
               >
-                <HiOutlineUser
-                  class="resizeicon"
-                  size="70%"
-                  color="black"
-                  style={{ paddingTop: "1vh" }}
-                />
-              </a>
+                <a
+                  id="profile-menu-user"
+                  class="profile-menu-user"
+                  href="javascript:void(0);"
+                >
+                  <HiOutlineUser
+                    class="resizeicon"
+                    size="70%"
+                    color="black"
+                    style={{ paddingTop: "1vh" }}
+                  />
+                </a>
               </Tooltip>
               <div id="collapsible1" style={{ display: "none" }}>
                 <div
@@ -483,9 +497,8 @@ function Lobby({ history, project }) {
                   }
                 }}
               >
-                <BsChevronCompactDown class="resizeicon" size={25} id="down"  />
+                <BsChevronCompactDown class="resizeicon" size={25} id="down" />
               </div>
-              
             </div>
           </div>
         </>

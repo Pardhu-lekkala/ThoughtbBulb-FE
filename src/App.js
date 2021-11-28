@@ -100,6 +100,7 @@ function App() {
               {/* <PrivateRoute path="/" component={Overview} exact={true} /> */}
 
               {/* GENERAL */}
+              <Route path="/static/:accesscode" component={Login} exact={true} />
               <Route path="/Lobby" component={Lobby} exact={true} />
               <Route path="/Auditorium" component={Auditorium} exact={true} />
               <Route path="/page/:pageId" component={Page} exact={true} />

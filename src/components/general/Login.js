@@ -11,7 +11,10 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { startSetProject } from "../../redux/actions/project";
+import {
+  startSetProject,
+  startSetProjectStatic,
+} from "../../redux/actions/project";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
@@ -19,16 +22,23 @@ import Box from "@material-ui/core/Box";
 
 function LinearProgressWithLabel(props) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }} style={{
-      position: "absolute",
-      left: "45%",
-      top: "35%",
-      zIndex: 1000,
-      height: "150px",
-      width: "250px",
-    }}>
+    <Box
+      sx={{ display: "flex", alignItems: "center" }}
+      style={{
+        position: "absolute",
+        left: "45%",
+        top: "35%",
+        zIndex: 1000,
+        height: "150px",
+        width: "250px",
+      }}
+    >
       <Box sx={{ width: "100%", mr: 1 }}>
-        <LinearProgress style={{height:"10px"}} variant="determinate" {...props} />
+        <LinearProgress
+          style={{ height: "10px" }}
+          variant="determinate"
+          {...props}
+        />
       </Box>
       <Box sx={{ minWidth: 35 }}>
         <Typography variant="body2" color="text.secondary">{`${Math.round(
@@ -60,8 +70,13 @@ function LinearWithValueLabel() {
   );
 }
 
-
-function Login({ history, match, project, startSetProject }) {
+function Login({
+  history,
+  match,
+  project,
+  startSetProject,
+  startSetProjectStatic,
+}) {
   const classes = useStyles();
 
   const [videoNo, setVideoNo] = React.useState(0);
@@ -69,36 +84,40 @@ function Login({ history, match, project, startSetProject }) {
   const [LoginSignupTransitionMP4, setLoginSignupTransition] =
     React.useState(null);
 
-    function validation(){
-      let email= document.getElementById('email').value;
-      let form= document.getElementById('form');
-      // let text= document.getElementById('text');
-      let pattern=/^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-      console.log(email);
-         
-      if(email.match(pattern)){
-        form.classList.add("valid");
-        form.classList.remove("invalid");
-        // text.innerHTML="Your Email is valid";
-        // text.style.color="green";
-        localStorage.setItem("email",email);
-        setStart(false);
-        setVideoNo(1);
-      }
-      else{
-        form.classList.remove("valid");
-        form.classList.add("invalid");
-        // text.innerHTML="please enter a valid email";
-        // text.style.color="red";
-        setTooltipIsOpen(true);
-      }
+  function validation() {
+    let email = document.getElementById("email").value;
+    let form = document.getElementById("form");
+    // let text= document.getElementById('text');
+    let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    console.log(email);
+
+    if (email.match(pattern)) {
+      form.classList.add("valid");
+      form.classList.remove("invalid");
+      // text.innerHTML="Your Email is valid";
+      // text.style.color="green";
+      localStorage.setItem("email", email);
+      setStart(false);
+      setVideoNo(1);
+    } else {
+      form.classList.remove("valid");
+      form.classList.add("invalid");
+      // text.innerHTML="please enter a valid email";
+      // text.style.color="red";
+      setTooltipIsOpen(true);
     }
-    const [tooltipIsOpen, setTooltipIsOpen] = React.useState(false);
-    const [start, setStart] = React.useState(false);
+  }
+  const [tooltipIsOpen, setTooltipIsOpen] = React.useState(false);
+  const [start, setStart] = React.useState(false);
 
   React.useEffect(() => {
     (async () => {
-      await startSetProject(match.params.accesscode);
+      console.log(match);
+      if (match.path === "/static/:accesscode") {
+        startSetProjectStatic(match.params.accesscode);
+      } else {
+        await startSetProject(match.params.accesscode);
+      }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -154,31 +173,31 @@ function Login({ history, match, project, startSetProject }) {
     }
   }, [project]);
 
-React.useEffect(()=>{
-  // timeout1= 
-  setTimeout(() => {
-    setStart(true);
-  }, 5000);
-  
-  // function tooltip(){
-    // timeout2=
-    setTimeout(function (){
-    setStart(false);
-  }, 15000);
+  React.useEffect(() => {
+    // timeout1=
+    setTimeout(() => {
+      setStart(true);
+    }, 5000);
 
-  // return () => {
-  //   clearTimeout(timeout1);
-  //   clearTimeout(timeout2);
-  // };
-},[]);
+    // function tooltip(){
+    // timeout2=
+    setTimeout(function () {
+      setStart(false);
+    }, 15000);
+
+    // return () => {
+    //   clearTimeout(timeout1);
+    //   clearTimeout(timeout2);
+    // };
+  }, []);
 
   // }
-    // tooltip();
+  // tooltip();
 
   return (
     <>
       {LoginSignupLoopMP4 === null || LoginSignupTransitionMP4 === null ? (
-       <LinearWithValueLabel />
+        <LinearWithValueLabel />
       ) : (
         <>
           <video autoPlay muted loop className={classes.LoginSignupLoop}>
@@ -186,77 +205,89 @@ React.useEffect(()=>{
             Your browser does not support HTML5 video.
           </video>
           <header className={classes.viewportHeader}>
-          <form class="form" action="#" id="form">
-            <Grid container spacing={4} style={{ margin: "170px 70px" }}>
-              <Grid item xs={12}>
-              <Tooltip title={<b style={{ fontSize: "0.8vw" }}>Start Here</b>} placement="top-start" arrow open={start}>
-              <Tooltip title={<b style={{ color:"red" , fontSize: "0.8vw" }}>please enter a valid email</b>} placement="right" arrow open={tooltipIsOpen} >
-                <TextField
-                   id="email"
-                   name="email"
-                   label="Email"
-                   type="Email"
-                   required
-                   variant="outlined"
-                   style={{ color: "black", backgroundColor: "white" }}
-                   onClick={
-                     ()=>{
-                      //  let text= document.getElementById('text');
-                      //  text.innerHTML="";
-                       setTooltipIsOpen(false);
-                       setStart(false);
-                     }
-                   }
-                   
-                />
-                </Tooltip>
-                </Tooltip>
-              </Grid>
-              {/* <span id="text" style={{fontWeight:"bolder", backgroundColor:"white", marginLeft:"20px"}}>
+            <form class="form" action="#" id="form">
+              <Grid container spacing={4} style={{ margin: "170px 70px" }}>
+                <Grid item xs={12}>
+                  <Tooltip
+                    title={<b style={{ fontSize: "0.8vw" }}>Start Here</b>}
+                    placement="top-start"
+                    arrow
+                    open={start}
+                  >
+                    <Tooltip
+                      title={
+                        <b style={{ color: "red", fontSize: "0.8vw" }}>
+                          please enter a valid email
+                        </b>
+                      }
+                      placement="right"
+                      arrow
+                      open={tooltipIsOpen}
+                    >
+                      <TextField
+                        id="email"
+                        name="email"
+                        label="Email"
+                        type="Email"
+                        required
+                        variant="outlined"
+                        style={{ color: "black", backgroundColor: "white" }}
+                        onClick={() => {
+                          //  let text= document.getElementById('text');
+                          //  text.innerHTML="";
+                          setTooltipIsOpen(false);
+                          setStart(false);
+                        }}
+                      />
+                    </Tooltip>
+                  </Tooltip>
+                </Grid>
+                {/* <span id="text" style={{fontWeight:"bolder", backgroundColor:"white", marginLeft:"20px"}}>
                 </span> */}
-              <Grid item xs={12}>
-                <Button className="loginbtn"
-                  variant="contained"
-                  style={{
-                    color: project.secondaryColor,
-                    backgroundColor: project.primaryColor,
-                    borderRadius:"15px"
-                  }}
-                  onClick={() => validation()}
-                >
-                  Login
-                  <CircularProgress
+                <Grid item xs={12}>
+                  <Button
+                    className="loginbtn"
+                    variant="contained"
                     style={{
-                      display: videoNo === 1 ? "block" : "none",
-                      width: "16px",
-                      height: "16px",
-                      marginLeft: "20px",
                       color: project.secondaryColor,
+                      backgroundColor: project.primaryColor,
+                      borderRadius: "15px",
                     }}
-                  />
-                </Button>
+                    onClick={() => validation()}
+                  >
+                    Login
+                    <CircularProgress
+                      style={{
+                        display: videoNo === 1 ? "block" : "none",
+                        width: "16px",
+                        height: "16px",
+                        marginLeft: "20px",
+                        color: project.secondaryColor,
+                      }}
+                    />
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
             </form>
           </header>
 
           {videoNo === 1 && (
             <>
-            <ReactPlayer
-              url={LoginSignupTransitionMP4}
-              autoPlay={true}
-              playing={true}
-              //muted={true}
-              controls={false}
-              width="100%"
-              height="auto"
-              className={classes.LoginSignupLoop}
-              onEnded={() => {
-                history.push("/Lobby");
-              }}
-              style={{ zIndex: videoNo === 1 ? 100 : "" }}
-            />
-            <Button
+              <ReactPlayer
+                url={LoginSignupTransitionMP4}
+                autoPlay={true}
+                playing={true}
+                //muted={true}
+                controls={false}
+                width="100%"
+                height="auto"
+                className={classes.LoginSignupLoop}
+                onEnded={() => {
+                  history.push("/Lobby");
+                }}
+                style={{ zIndex: videoNo === 1 ? 100 : "" }}
+              />
+              <Button
                 id="skipbtn"
                 style={{
                   color: `${project.secondaryColor}`,
@@ -265,7 +296,7 @@ React.useEffect(()=>{
                   top: "15px",
                   right: "15px",
                   zIndex: "200",
-                  borderRadius:"15px"
+                  borderRadius: "15px",
                 }}
                 onClick={
                   (() => setVideoNo(0),
@@ -286,6 +317,6 @@ React.useEffect(()=>{
 
 const mapStateToProps = (state) => ({ project: state.project });
 
-const mapDispatchToProps = { startSetProject };
+const mapDispatchToProps = { startSetProject, startSetProjectStatic };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

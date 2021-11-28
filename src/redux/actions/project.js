@@ -19,3 +19,17 @@ export const startSetProject = (accesscode) => {
       });
   };
 };
+
+export const startSetProjectStatic = (accesscode) => {
+  return async (dispatch) => {
+    axios
+      .get(`https://conference-deploy.s3.amazonaws.com/${accesscode}.json`)
+      .then((response) => {
+        console.log(response.data);
+        dispatch(setProject(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+};

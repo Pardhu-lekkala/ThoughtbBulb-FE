@@ -1,15 +1,38 @@
-import { Button } from "@material-ui/core";
 import React from "react";
+
 import { connect } from "react-redux";
-import "../../styles/componentStyles/lobby.css";
+
 import useStyles from "./useStylesPage";
+import "../../styles/componentStyles/lobby.css";
+import useWindowDimensions from "./useWindowDimensions";
+
+import Fab from "@material-ui/core/Fab";
+import { Button } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+
 import { BiArrowBack } from "react-icons/bi";
 import { BsChevronCompactDown } from "react-icons/bs";
 import { HiOutlineUser } from "react-icons/hi";
-import Tooltip from "@material-ui/core/Tooltip";
-import useWindowDimensions from "./useWindowDimensions";
 
 import ReactPlayer from "react-player";
+
+function getVimeoId(url) {
+  // Look for a string with 'vimeo', then whatever, then a
+  // forward slash and a group of digits.
+  var match =
+    /(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/.exec(
+      url
+    );
+
+  // If the match isn't null (i.e. it matched)
+  if (match) {
+    // The grouped/matched digits from the regex
+    return match[match.length - 1];
+  } else {
+    return null;
+  }
+}
 
 function Page({ history, match, project }) {
   // console.log(history);
@@ -21,7 +44,6 @@ function Page({ history, match, project }) {
   //const scrollRef = React.useRef(null);
 
   const [page, setPage] = React.useState(null);
-  
 
   function updatePointer(makrw1, makrh1, makrw2, makrh2, imagew, imageh) {
     let width = Math.max(
@@ -104,8 +126,10 @@ function Page({ history, match, project }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   let icon = 0;
-  let loginCredentials=localStorage.getItem("email");
-  console.log(loginCredentials)
+  let loginCredentials = localStorage.getItem("email");
+  //console.log(loginCredentials);
+
+  const [isChatOpen, setChatOpen] = React.useState(false);
 
   return (
     <>
@@ -115,23 +139,21 @@ function Page({ history, match, project }) {
         style={{ background: "#ffffff", right: "60px" }}
       >
         <div class="profile-menu-header">
-        <Tooltip
-             title={
-              <b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>
-            }
+          <Tooltip
+            title={<b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>}
             placement="left"
-             >
-          <a
-            id="profile-menu-user"
-            class="profile-menu-user"
-            href="javascript:void(0);"
           >
-            <HiOutlineUser
-              size={50}
-              color="black"
-              style={{ paddingTop: "5px" }}
-            />
-          </a>
+            <a
+              id="profile-menu-user"
+              class="profile-menu-user"
+              href="javascript:void(0);"
+            >
+              <HiOutlineUser
+                size={50}
+                color="black"
+                style={{ paddingTop: "5px" }}
+              />
+            </a>
           </Tooltip>
           <div id="collapsible1" style={{ display: "none" }}>
             <div class="spacer" style={{ backgroundColor: "#5b5b5b" }}></div>
@@ -151,16 +173,13 @@ function Page({ history, match, project }) {
                       <a
                         id="link"
                         onClick={() => {
-                          if(item.id == project.homepage){
-                            history.push(`/lobby`)
-                          }
-                          else if(item.id==match.params.pageId)
-                          {
-                            alert(`already in ${item.pageName}`)
-                          }
-                          else{
-                          history.push(`/page/${item.id}`);
-                          window.location.reload(); 
+                          if (item.id == project.homepage) {
+                            history.push(`/lobby`);
+                          } else if (item.id == match.params.pageId) {
+                            alert(`already in ${item.pageName}`);
+                          } else {
+                            history.push(`/page/${item.id}`);
+                            window.location.reload();
                           }
                           // console.log("this is the one", history);
                         }}
@@ -170,7 +189,15 @@ function Page({ history, match, project }) {
                           src={item.pageIcon.url}
                           alt={item.pageName}
                         />
-                        <span style={{ color: item.id == match.params.pageId  ? "red" : "black", fontWeight:"bold" }}>{item.pageName}</span>
+                        <span
+                          style={{
+                            color:
+                              item.id == match.params.pageId ? "red" : "black",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {item.pageName}
+                        </span>
                       </a>
                     </div>
                   </div>
@@ -243,19 +270,65 @@ function Page({ history, match, project }) {
                 page?.backgroundImage?.width,
                 page?.backgroundImage?.height
               );
+              console.log(item);
               return (
-                <ReactPlayer
-                  //url={"https://vimeo.com/253989945"}
-                  url={item.videoURL}
-                  height={pointerObj.height}
-                  width={pointerObj.width}
-                  controls={true}
-                  style={{
-                    position: "relative",
-                    top: pointerObj.Y1,
-                    left: pointerObj.X1,
-                  }}
-                />
+                <>
+                  <ReactPlayer
+                    //url={"https://vimeo.com/253989945"}
+                    url={item.videoURL}
+                    height={pointerObj.height}
+                    width={pointerObj.width}
+                    controls={true}
+                    style={{
+                      position: "relative",
+                      top: pointerObj.Y1,
+                      left: pointerObj.X1,
+                    }}
+                  />
+
+                  {item.videoType === "Vimeo" &&
+                    item.videoURL.indexOf("event") > -1 && (
+                      <>
+                        <Fab
+                          style={{
+                            margin: 0,
+                            top: "auto",
+                            right: 20,
+                            bottom: 20,
+                            left: "auto",
+                            position: "fixed",
+                          }}
+                          color="primary"
+                          aria-label="add"
+                          onClick={() => {
+                            setChatOpen((toggle) => !toggle);
+                          }}
+                        >
+                          <ChatBubbleIcon />
+                        </Fab>
+
+                        {isChatOpen && (
+                          <>
+                            <iframe
+                              src={item.videoURL + "/chat"}
+                              title="chat"
+                              style={{
+                                margin: 0,
+                                top: "auto",
+                                right: 20,
+                                bottom: 80,
+                                left: "auto",
+                                position: "fixed",
+                                height: "450px",
+                                width: "300px",
+                                border:"0px"
+                              }}
+                            />
+                          </>
+                        )}
+                      </>
+                    )}
+                </>
               );
             })}
           </header>
@@ -272,7 +345,11 @@ const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);
 
-/* <iframe
+/* 
+src={`https://vimeo.com/event/${getVimeoId(
+                          item.videoURL
+                        )}/chat/`}
+<iframe
                   title={item.name}
                   height={pointerObj.height}
                   width={pointerObj.width}
