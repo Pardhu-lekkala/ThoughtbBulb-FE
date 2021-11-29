@@ -64,7 +64,6 @@ function App() {
     } else {
             setIsLandscape(false)
     }
-    console.log("1")
   }
   
   useEffect(() => {

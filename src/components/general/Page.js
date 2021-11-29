@@ -7,9 +7,12 @@ import "../../styles/componentStyles/lobby.css";
 import useWindowDimensions from "./useWindowDimensions";
 
 import Fab from "@material-ui/core/Fab";
-import { Button } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { BiArrowBack } from "react-icons/bi";
 import { BsChevronCompactDown } from "react-icons/bs";
@@ -115,11 +118,8 @@ function Page({ history, match, project }) {
   }, [height, width]);
 
   React.useEffect(() => {
-    console.log(match.params.pageId);
     if (match?.params?.pageId) {
       const p = pages?.find((e) => +e.id === +match.params.pageId);
-      console.log(p);
-      console.log(pages);
       p ? setPage(p) : setPage(null);
     }
     // window.scrollTo(0, 0);
@@ -129,7 +129,8 @@ function Page({ history, match, project }) {
   let loginCredentials = localStorage.getItem("email");
   //console.log(loginCredentials);
 
-  const [isChatOpen, setChatOpen] = React.useState(false);
+  const [isChatOpen, setChatOpen] = React.useState(true);
+  const [hideChatSpinner, setHideChatSpinner] = React.useState(false);
 
   return (
     <>
@@ -270,7 +271,6 @@ function Page({ history, match, project }) {
                 page?.backgroundImage?.width,
                 page?.backgroundImage?.height
               );
-              console.log(item);
               return (
                 <>
                   <ReactPlayer
@@ -304,27 +304,77 @@ function Page({ history, match, project }) {
                             setChatOpen((toggle) => !toggle);
                           }}
                         >
-                          <ChatBubbleIcon />
+                          <ChatBubbleIcon
+                            style={{
+                              display: hideChatSpinner ? "block" : "none",
+                            }}
+                          />
+                          <CircularProgress
+                            style={{
+                              display: !hideChatSpinner ? "block" : "none",
+                              //width: "16px",
+                              //height: "16px",
+                              //marginLeft: "20px",
+                              color: project.secondaryColor,
+                            }}
+                          />
                         </Fab>
 
                         {isChatOpen && (
-                          <>
+                          <div
+                            style={{
+                              margin: 0,
+                              top: "auto",
+                              right: 20,
+                              bottom: 80,
+                              left: "auto",
+                              position: "fixed",
+                              //height: "450px",
+                              //width: "300px",
+                              height: "72%",
+                              width: "25%",
+                              border: "0px",
+                              backgroundColor: "white",
+                            }}
+                          >
+                            <IconButton
+                              onClick={() => {
+                                setChatOpen(false);
+                              }}
+                              style={{
+                                //top: "auto",
+                                right: 21,
+                                bottom: "auto",
+                                left: "auto",
+                                position: "fixed",
+                                marginTop: "10px",
+                              }}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                            <CircularProgress
+                              style={{
+                                display: !hideChatSpinner ? "block" : "none",
+                                margin: "50% auto",
+                                //width: "16px",
+                                //height: "16px",
+                                //marginLeft: "20px",
+                                color: project.secondaryColor,
+                              }}
+                            />
                             <iframe
                               src={item.videoURL + "/chat"}
                               title="chat"
                               style={{
-                                margin: 0,
-                                top: "auto",
-                                right: 20,
-                                bottom: 80,
-                                left: "auto",
-                                position: "fixed",
-                                height: "450px",
-                                width: "300px",
-                                border:"0px"
+                                height: "100%",
+                                width: "100%",
+                                display: hideChatSpinner ? "block" : "none",
+                              }}
+                              onLoad={() => {
+                                setHideChatSpinner(true);
                               }}
                             />
-                          </>
+                          </div>
                         )}
                       </>
                     )}

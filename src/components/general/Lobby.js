@@ -70,13 +70,13 @@ function updatePointer2(makrw, makrh, imagew, imageh) {
   );
 
   // console.clear();
-  console.log(width, height);
+  //console.log(width, height);
 
   const neww = (makrw / imagew) * width;
   const newh = (makrh / imageh) * height;
   let obj = { X: neww, Y: newh };
 
-  console.log({ X: (obj.X ^ 0) - 10, Y: (obj.Y ^ 0) - 10 });
+  //console.log({ X: (obj.X ^ 0) - 10, Y: (obj.Y ^ 0) - 10 });
 
   //<div class="marker1" style="position: absolute; top: 86px; left: 673px; width: 10px; height: 10px; background: rgb(255, 0, 0);"></div>
   const radiusw = (22 / imagew) * width;
@@ -156,7 +156,6 @@ function Lobby({ history, project }) {
     },
   })(Tooltip);
   let loginCredentials = localStorage.getItem("email");
-  console.log(loginCredentials);
 
   return (
     <>
@@ -168,7 +167,8 @@ function Lobby({ history, project }) {
         loop
         ref={BGRef}
       >
-        <source src={page?.backgroundVideo?.url} type="video/mp4" />
+        <source src={localStorage.getItem("lobby")} type="video/mp4" />
+        {/* <source src={page?.backgroundVideo?.url} type="video/mp4" /> */}
         Your browser does not support HTML5 video.
       </video>
 
@@ -375,17 +375,16 @@ function Lobby({ history, project }) {
               <DialogTitle
                 style={{ cursor: "move" }}
                 id="draggable-dialog-title"
-              >
-              </DialogTitle>
+              ></DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                   <iframe
+                  <iframe
                     src={url}
                     style={{ width: "40vw", height: "60vh" }}
                     //style={{ width: "90vw", height: "90vh" }}
                     //style={{ width: "90%", height: "90%" }}
                     frameborder="0"
-                  ></iframe> 
+                  ></iframe>
                   {/* <embed
                     src={url}
                     type="application/pdf"

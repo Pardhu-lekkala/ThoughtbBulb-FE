@@ -81,6 +81,7 @@ function Login({
 
   const [videoNo, setVideoNo] = React.useState(0);
   const [LoginSignupLoopMP4, setLoginSignupLoop] = React.useState(null);
+  const [lobbyLoopVideo, setLobbyLoopVideo] = React.useState(null);
   const [LoginSignupTransitionMP4, setLoginSignupTransition] =
     React.useState(null);
 
@@ -89,7 +90,6 @@ function Login({
     let form = document.getElementById("form");
     // let text= document.getElementById('text');
     let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-    console.log(email);
 
     if (email.match(pattern)) {
       form.classList.add("valid");
@@ -112,7 +112,6 @@ function Login({
 
   React.useEffect(() => {
     (async () => {
-      console.log(match);
       if (match.path === "/static/:accesscode") {
         startSetProjectStatic(match.params.accesscode);
       } else {
@@ -170,6 +169,33 @@ function Login({
           );
           setLoginSignupTransition(url);
         });
+
+      axios
+        .get(
+          //`https://platoodemo.s3.ap-south-1.amazonaws.com/assets/LoginSignupTransition.mp4`,
+          `${
+            project?.pages.find((e) => e.id === project.homepage)
+              ?.backgroundVideo?.url
+          }`,
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods":
+                "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers":
+                "Origin, Content-Type, X-Auth-Token",
+            },
+            responseType: "blob",
+          }
+        )
+        .then((response) => {
+          const URL = window.URL || window.webkitURL;
+          const url = URL.createObjectURL(
+            new Blob([response.data], { type: "video/mp4" })
+          );
+          localStorage.setItem("lobby", url);
+          setLobbyLoopVideo(url);
+        });
     }
   }, [project]);
 
@@ -196,7 +222,9 @@ function Login({
 
   return (
     <>
-      {LoginSignupLoopMP4 === null || LoginSignupTransitionMP4 === null ? (
+      {LoginSignupLoopMP4 === null ||
+      LoginSignupTransitionMP4 === null ||
+      lobbyLoopVideo === null ? (
         <LinearWithValueLabel />
       ) : (
         <>

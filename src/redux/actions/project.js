@@ -25,7 +25,6 @@ export const startSetProjectStatic = (accesscode) => {
     axios
       .get(`https://conference-deploy.s3.amazonaws.com/${accesscode}.json`)
       .then((response) => {
-        console.log(response.data);
         dispatch(setProject(response.data));
       })
       .catch((error) => {
