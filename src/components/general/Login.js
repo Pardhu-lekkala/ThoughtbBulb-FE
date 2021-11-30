@@ -244,8 +244,14 @@ function Login({
                   >
                     <Tooltip
                       title={
-                        <b style={{ color: "red", fontSize: "0.8vw" }}>
-                          please enter a valid email
+                        <b
+                          style={{
+                            color: "white",
+                            //background: "white",
+                            fontSize: "1.2vw",
+                          }}
+                        >
+                          Please Enter a Valid Email
                         </b>
                       }
                       placement="right"
@@ -281,7 +287,9 @@ function Login({
                       backgroundColor: project.primaryColor,
                       borderRadius: "15px",
                     }}
-                    onClick={() => validation()}
+                    onClick={(e) => {
+                      validation();
+                    }}
                   >
                     Login
                     <CircularProgress

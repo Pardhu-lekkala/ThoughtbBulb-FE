@@ -17,8 +17,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Draggable from "react-draggable";
-import Backdrop from "@material-ui/core/Backdrop";
-import { ColorizeOutlined } from "@material-ui/icons";
 
 // import { withStyles, makeStyles } from '@material-ui/core/styles';
 // import Typography from '@material-ui/core/Typography';
@@ -121,7 +119,9 @@ function Lobby({ history, project }) {
   const [BGwidth, setBGWidth] = React.useState();
   const [BGheight, setBGHeight] = React.useState();
   const [url, setUrl] = React.useState("");
-  const [isHover, setIsHover] = React.useState(false);
+  //const [isHover, setIsHover] = React.useState(false);
+
+  const isHover = false;
 
   // This function calculates width and height of the BG
   const getBGSize = () => {
@@ -135,6 +135,9 @@ function Lobby({ history, project }) {
   // Get 'width' and 'height' after the initial render and every time the window height/width changes
   React.useEffect(() => {
     getBGSize();
+    if (BGwidth && BGheight) {
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [height, width]);
 
   let setShowIcon = false;
@@ -233,10 +236,10 @@ function Lobby({ history, project }) {
                           ).left,
                         }}
                         onClick={() => {
-                          if (item.destinationType == "PDF") {
+                          if (item.destinationType === "PDF") {
                             setUrl(item.destinationLink);
                             handleClickOpen();
-                          } else if (item.destinationType == "Link") {
+                          } else if (item.destinationType === "Link") {
                             window.open(item.destinationLink);
                           } else {
                             let scrollDown =
@@ -250,7 +253,11 @@ function Lobby({ history, project }) {
                                   src: item.TransVideo.url,
                                   pageId: item.destinationPage,
                                 })
-                              : console.log("No Transition Video");
+                              : setVideoNo({
+                                  no: 1,
+                                  src: item.TransVideo.url,
+                                  pageId: item.destinationPage,
+                                });
                           }
                         }}
                       ></span>
@@ -326,11 +333,11 @@ function Lobby({ history, project }) {
                           let scrollDown =
                             document.getElementById("profile-menu");
                           scrollDown.style.display = "none";
-                          if (item.destinationType == "PDF") {
+                          if (item.destinationType === "PDF") {
                             document.getElementById(
                               "modalContent"
                             ).style.display = "block";
-                          } else if (item.destinationType == "link") {
+                          } else if (item.destinationType === "link") {
                             window.open(item.destinationLink);
                           } else {
                             setLabelIsOpen(false);
@@ -341,7 +348,11 @@ function Lobby({ history, project }) {
                                   src: item.TransVideo.url,
                                   pageId: item.destinationPage,
                                 })
-                              : console.log("No Transition Video");
+                              : setVideoNo({
+                                  no: 1,
+                                  src: item.TransVideo.url,
+                                  pageId: item.destinationPage,
+                                });
                           }
                         }}
                       ></span>
@@ -384,6 +395,7 @@ function Lobby({ history, project }) {
                     //style={{ width: "90vw", height: "90vh" }}
                     //style={{ width: "90%", height: "90%" }}
                     frameborder="0"
+                    title="iframe"
                   ></iframe>
                   {/* <embed
                     src={url}
@@ -404,7 +416,20 @@ function Lobby({ history, project }) {
           <div
             id="profile-menu"
             class="profile-menu"
-            style={{ background: "#ffffff", right: "60px" }}
+            style={{ background: "#ffffff", right: "60px", cursor: "pointer" }}
+            onClick={() => {
+              let arrow = document.getElementById("collapsible1");
+              let down = document.getElementById("down");
+              if (setShowIcon) {
+                arrow.style.display = "block";
+                setShowIcon = false;
+                down.style.transform = "rotate(180deg)";
+              } else {
+                arrow.style.display = "none";
+                setShowIcon = true;
+                down.style.transform = "rotate(0deg)";
+              }
+            }}
           >
             <div class="profile-menu-header">
               <Tooltip
@@ -444,8 +469,10 @@ function Lobby({ history, project }) {
                           <a
                             id="link"
                             onClick={() => {
-                              if (item.id == project.homepage) {
-                                alert("already in lobby");
+                              if (item.id === project.homepage) {
+                                alert(
+                                  "Please note we are already on lobby page"
+                                );
                               } else {
                                 history.push(`/page/${item.id}`);
                                 window.location.reload();
@@ -460,7 +487,9 @@ function Lobby({ history, project }) {
                             <span
                               style={{
                                 color:
-                                  item.id == project.homepage ? "red" : "black",
+                                  item.id === project.homepage
+                                    ? "red"
+                                    : "black",
                                 fontWeight: "bold",
                                 fontSize: "72%",
                                 wordWrap: "break-word",
@@ -481,19 +510,6 @@ function Lobby({ history, project }) {
                   background: "rgb(255, 255, 255)",
                   padding: "5% 35% 3%",
                   textAlign: "center",
-                }}
-                onClick={() => {
-                  let arrow = document.getElementById("collapsible1");
-                  let down = document.getElementById("down");
-                  if (setShowIcon) {
-                    arrow.style.display = "block";
-                    setShowIcon = false;
-                    down.style.transform = "rotate(180deg)";
-                  } else {
-                    arrow.style.display = "none";
-                    setShowIcon = true;
-                    down.style.transform = "rotate(0deg)";
-                  }
                 }}
               >
                 <BsChevronCompactDown class="resizeicon" size={25} id="down" />
