@@ -14,37 +14,42 @@ import CloseIcon from "@material-ui/icons/Close";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+import { withStyles } from "@material-ui/core/styles";
+import Fade from "@material-ui/core/Fade";
+
 import { BiArrowBack } from "react-icons/bi";
 import { BsChevronCompactDown } from "react-icons/bs";
 import { HiOutlineUser } from "react-icons/hi";
 
 import ReactPlayer from "react-player";
 
-function getVimeoId(url) {
-  // Look for a string with 'vimeo', then whatever, then a
-  // forward slash and a group of digits.
-  var match =
-    /(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/.exec(
-      url
-    );
+function updatePointer2(makrw, makrh, imagew, imageh) {
+  let width = Math.max(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  );
+  let height = Math.max(
+    document.documentElement.clientHeight,
+    window.innerHeight || 0
+  );
 
-  // If the match isn't null (i.e. it matched)
-  if (match) {
-    // The grouped/matched digits from the regex
-    return match[match.length - 1];
-  } else {
-    return null;
-  }
+  const neww = (makrw / imagew) * width;
+  const newh = (makrh / imageh) * height;
+  let obj = { X: neww, Y: newh };
+
+  const radiusw = (22 / imagew) * width;
+  const radiush = (22 / imageh) * height;
+  return {
+    top: `${(obj.Y ^ 0) - radiush}px`,
+    left: `${(obj.X ^ 0) - radiusw}px`,
+  };
 }
 
 function Page({ history, match, project }) {
-  // console.log(history);
   const pages = project.pages;
   const primaryColor = project.primaryColor;
   const secondaryColor = project.secondaryColor;
   const classes = useStyles();
-
-  //const scrollRef = React.useRef(null);
 
   const [page, setPage] = React.useState(null);
 
@@ -57,15 +62,6 @@ function Page({ history, match, project }) {
       document.documentElement.clientHeight,
       window.innerHeight || 0
     );
-    //let imagew = 1920;
-    //let imageh = 1080;
-    //console.log(imagew, imageh)
-    // console.log(makrw1, makrh2);
-
-    // console.log(width + " screen width " + height);
-
-    // console.clear();
-    // console.log(width, height);
 
     const neww1 = (makrw1 / imagew) * width;
     const newh1 = (makrh1 / imageh) * height;
@@ -80,16 +76,10 @@ function Page({ history, match, project }) {
       X2: `${(obj.X2 ^ 0) - 12}px`,
     };
 
-    // console.log(coordinates);
-
-    //<div class="marker1" style="position: absolute; top: 86px; left: 673px; width: 10px; height: 10px; background: rgb(255, 0, 0);"></div>
-
     return {
       ...coordinates,
       width: (obj.X2 ^ 0) - 12 - ((obj.X1 ^ 0) - 12),
       height: (obj.Y2 ^ 0) - 12 - ((obj.Y1 ^ 0) - 12),
-      /* width: (obj.X2 ^ 0) - 12 - ((obj.X1 ^ 0) - 12),
-      height: (obj.Y2 ^ 0) - 12 - ((obj.Y1 ^ 0) - 12), */
     };
   }
 
@@ -109,12 +99,14 @@ function Page({ history, match, project }) {
 
     const newHeight = BGRef?.current?.clientHeight;
     setBGHeight(newHeight);
-    //console.log("CALCULATING NEW DIM.", { width: newWidth, height: newHeight });
   };
 
   // Get 'width' and 'height' after the initial render and every time the window height/width changes
   React.useEffect(() => {
     getBGSize();
+    if (BGwidth && BGheight) {
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [height, width]);
 
   React.useEffect(() => {
@@ -122,15 +114,47 @@ function Page({ history, match, project }) {
       const p = pages?.find((e) => +e.id === +match.params.pageId);
       p ? setPage(p) : setPage(null);
     }
-    // window.scrollTo(0, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   let icon = 0;
   let loginCredentials = localStorage.getItem("email");
-  //console.log(loginCredentials);
 
   const [isChatOpen, setChatOpen] = React.useState(true);
   const [hideChatSpinner, setHideChatSpinner] = React.useState(false);
+
+  const [tooltipIsOpen, setTooltipIsOpen] = React.useState(true);
+  const [LabelIsOpen, setLabelIsOpen] = React.useState(true);
+  const [url, setUrl] = React.useState("");
+
+  const isHover = false;
+
+  const handleClickOpen = () => {
+    document.getElementById("tooltips").href = "#popup-article";
+    setLabelIsOpen(false);
+  };
+
+  const [videoNo, setVideoNo] = React.useState({
+    no: 0,
+    src: null,
+    pageId: null,
+  });
+
+  function tooltip() {
+    setTimeout(function () {
+      setTooltipIsOpen(false);
+    }, 5000);
+  }
+  tooltip();
+
+  const NewTooltip = withStyles({
+    tooltip: {
+      color: project.primaryColor,
+      backgroundColor: project.secondaryColor,
+    },
+    arrow: {
+      color: project.secondaryColor,
+    },
+  })(Tooltip);
 
   return (
     <>
@@ -141,6 +165,7 @@ function Page({ history, match, project }) {
       >
         <div class="profile-menu-header">
           <Tooltip
+            arrow
             title={<b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>}
             placement="left"
           >
@@ -165,7 +190,6 @@ function Page({ history, match, project }) {
                   style={{
                     background: "rgb(255, 255, 255)",
                     maxHeight: "547px",
-                    // display: item.id == project.homepage||item.id==match.params.pageId ? "none" : "block",
                   }}
                 >
                   <div class="icon-links">
@@ -193,7 +217,7 @@ function Page({ history, match, project }) {
                         <span
                           style={{
                             color:
-                              item.id == match.params.pageId ? "red" : "black",
+                              item.id === match.params.pageId ? "red" : "black",
                             fontWeight: "bold",
                           }}
                         >
@@ -216,7 +240,7 @@ function Page({ history, match, project }) {
             onClick={() => {
               let arrow = document.getElementById("collapsible1");
               let down = document.getElementById("down");
-              if (icon == 0) {
+              if (icon === 0) {
                 arrow.style.display = "block";
                 icon++;
                 down.style.transform = "rotate(180deg)";
@@ -262,6 +286,184 @@ function Page({ history, match, project }) {
           </video>
 
           <header className={classes.viewportHeader}>
+            {page?.markers?.map((item, index) => {
+              if (item.VisibileLabel) {
+                return (
+                  <>
+                    <Tooltip
+                      key={index}
+                      title={
+                        <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                      }
+                      placement="top"
+                      arrow
+                      open={LabelIsOpen}
+                    >
+                      <NewTooltip
+                        key={index}
+                        title={
+                          <b style={{ fontSize: "0.8vw" }}>
+                            {item.markerLabel}
+                          </b>
+                        }
+                        placement="top"
+                        arrow
+                      >
+                        <a
+                          href="#"
+                          className={classes.pulseAnimation}
+                          id={index}
+                          id="tooltips"
+                          style={{
+                            backgroundColor: isHover
+                              ? project.primaryColor
+                              : project.markerColor,
+                            position: "relative",
+
+                            top: updatePointer2(
+                              +item?.markerPosition?.split(",")[0],
+                              +item?.markerPosition?.split(",")[1],
+                              page?.backgroundImage?.width,
+                              page?.backgroundImage?.height
+                            ).top,
+
+                            left: updatePointer2(
+                              +item?.markerPosition?.split(",")[0],
+                              +item?.markerPosition?.split(",")[1],
+                              page?.backgroundImage?.width,
+                              page?.backgroundImage?.height
+                            ).left,
+                          }}
+                          onClick={() => {
+                            setTooltipIsOpen(false);
+                            let scrollDown =
+                              document.getElementById("profile-menu");
+                            scrollDown.style.display = "none";
+                            if (item.destinationType === "PDF") {
+                              setUrl(item.destinationLink);
+                              handleClickOpen();
+                            } else if (item.destinationType === "Link") {
+                              window.open(item.destinationLink);
+                            } else {
+                              let scrollDown =
+                                document.getElementById("profile-menu");
+                              scrollDown.style.display = "none";
+                              setLabelIsOpen(false);
+                              setTooltipIsOpen(false);
+                              item.TransVideo
+                                ? setVideoNo({
+                                    no: 1,
+                                    src: item.TransVideo.url,
+                                    pageId: item.destinationPage,
+                                  })
+                                : setVideoNo({
+                                    no: 1,
+                                    src: item.TransVideo.url,
+                                    pageId: item.destinationPage,
+                                  });
+                            }
+                          }}
+                        ></a>
+                      </NewTooltip>
+                    </Tooltip>
+                    <video
+                      src={item.TransVideo ? item.TransVideo.url : ""}
+                      preload="auto"
+                      style={{ display: "none" }}
+                    />
+                  </>
+                );
+              } else {
+                return (
+                  <>
+                    <Tooltip
+                      key={index}
+                      title={
+                        <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                      }
+                      placement="top"
+                      arrow
+                      leaveDelay={300}
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 400 }}
+                      open={tooltipIsOpen}
+                    >
+                      <NewTooltip
+                        key={index}
+                        title={
+                          <b style={{ fontSize: "0.8vw" }}>
+                            {item.markerLabel}
+                          </b>
+                        }
+                        placement="top"
+                        arrow
+                        leaveDelay={300}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 400 }}
+                      >
+                        <a
+                          href="#"
+                          id="tooltips"
+                          className={classes.pulseAnimation}
+                          style={{
+                            backgroundColor: isHover
+                              ? project.primaryColor
+                              : project.markerColor,
+                            position: "relative",
+
+                            top: updatePointer2(
+                              +item?.markerPosition?.split(",")[0],
+                              +item?.markerPosition?.split(",")[1],
+                              page?.backgroundImage?.width,
+                              page?.backgroundImage?.height
+                            ).top,
+
+                            left: updatePointer2(
+                              +item?.markerPosition?.split(",")[0],
+                              +item?.markerPosition?.split(",")[1],
+                              page?.backgroundImage?.width,
+                              page?.backgroundImage?.height
+                            ).left,
+                          }}
+                          onClick={() => {
+                            setTooltipIsOpen(false);
+                            let scrollDown =
+                              document.getElementById("profile-menu");
+                            scrollDown.style.display = "none";
+                            if (item.destinationType === "PDF") {
+                              setUrl(item.destinationLink);
+                              handleClickOpen();
+                            } else if (item.destinationType === "link") {
+                              window.open(item.destinationLink);
+                            } else {
+                              setLabelIsOpen(false);
+                              setTooltipIsOpen(false);
+                              item.TransVideo
+                                ? setVideoNo({
+                                    no: 1,
+                                    src: item.TransVideo.url,
+                                    pageId: item.destinationPage,
+                                  })
+                                : setVideoNo({
+                                    no: 1,
+                                    src: item.TransVideo.url,
+                                    pageId: item.destinationPage,
+                                  });
+                            }
+                          }}
+                        ></a>
+                      </NewTooltip>
+                    </Tooltip>
+                    <video
+                      src={item.TransVideo ? item.TransVideo.url : ""}
+                      preload="auto"
+                      style={{ display: "none" }}
+                    />
+                  </>
+                );
+              }
+            })}
+
             {page.video_areas.map((item) => {
               const pointerObj = updatePointer(
                 +item?.position?.split(",")[0],
@@ -274,7 +476,6 @@ function Page({ history, match, project }) {
               return (
                 <>
                   <ReactPlayer
-                    //url={"https://vimeo.com/253989945"}
                     url={item.videoURL}
                     height={pointerObj.height}
                     width={pointerObj.width}
@@ -312,9 +513,6 @@ function Page({ history, match, project }) {
                           <CircularProgress
                             style={{
                               display: !hideChatSpinner ? "block" : "none",
-                              //width: "16px",
-                              //height: "16px",
-                              //marginLeft: "20px",
                               color: project.secondaryColor,
                             }}
                           />
@@ -329,8 +527,6 @@ function Page({ history, match, project }) {
                               bottom: 80,
                               left: "auto",
                               position: "fixed",
-                              //height: "450px",
-                              //width: "300px",
                               height: "72%",
                               width: "25%",
                               border: "0px",
@@ -342,7 +538,6 @@ function Page({ history, match, project }) {
                                 setChatOpen(false);
                               }}
                               style={{
-                                //top: "auto",
                                 right: 21,
                                 bottom: "auto",
                                 left: "auto",
@@ -356,9 +551,6 @@ function Page({ history, match, project }) {
                               style={{
                                 display: !hideChatSpinner ? "block" : "none",
                                 margin: "50% auto",
-                                //width: "16px",
-                                //height: "16px",
-                                //marginLeft: "20px",
                                 color: project.secondaryColor,
                               }}
                             />
@@ -382,6 +574,42 @@ function Page({ history, match, project }) {
               );
             })}
           </header>
+          {videoNo.no === 1 && (
+            <>
+              <video
+                poster={page?.backgroundImage?.url}
+                autoPlay
+                className={classes.transitionLoop}
+                onEnded={() => {
+                  history.push(`/page/${videoNo.pageId}`);
+                }}
+                style={{ zIndex: videoNo.no === 1 ? 1000 : "" }}
+              >
+                <source src={videoNo.src} type="video/mp4" />
+                Your browser does not support HTML5 video.
+              </video>
+              <Button
+                id="skipbtn"
+                style={{
+                  color: `${project.secondaryColor}`,
+                  backgroundColor: `${project.primaryColor}`,
+                  position: "absolute",
+                  top: "15px",
+                  right: "15px",
+                  zIndex: "2000",
+                  borderRadius: "15px",
+                }}
+                onClick={
+                  (() => setVideoNo(0),
+                  () => {
+                    history.push(`/page/${videoNo.pageId}`);
+                  })
+                }
+              >
+                skip
+              </Button>
+            </>
+          )}
         </>
       )}
     </>
@@ -389,55 +617,7 @@ function Page({ history, match, project }) {
 }
 
 const mapStateToProps = (state) => ({ project: state.project });
-// const mapStateToProps = (state) => ({ pages: state.project.pages, primaryColor:state.project.primaryColor, secondaryColor:state.project.secondaryColor });
 
 const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);
-
-/* 
-src={`https://vimeo.com/event/${getVimeoId(
-                          item.videoURL
-                        )}/chat/`}
-<iframe
-                  title={item.name}
-                  height={pointerObj.height}
-                  width={pointerObj.width}
-                  style={{
-                    position: "relative",
-                    top: pointerObj.Y1,
-
-                    left: pointerObj.X1,
-                  }}
-                  src="https://www.youtube.com/embed/d5UMg-_ASOs"
-                ></iframe> 
-                
- 
-                item.videoType !== "Youtube" ? (
-                <video
-                  height={pointerObj.height}
-                  width={pointerObj.width}
-                  style={{
-                    position: "relative",
-                    top: pointerObj.Y1,
-
-                    left: pointerObj.X1,
-                  }}
-                >
-                  <source src={item.videoURL} type="video/mp4" />
-                </video>
-              ) : (
-                <ReactPlayer
-                  url={item.videoURL}
-                  height={pointerObj.height}
-                  width={pointerObj.width}
-                  controls={true}
-                  style={{
-                    position: "relative",
-                    top: pointerObj.Y1,
-
-                    left: pointerObj.X1,
-                  }}
-                />
-              )
-                */

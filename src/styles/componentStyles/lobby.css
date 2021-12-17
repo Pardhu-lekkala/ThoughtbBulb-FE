@@ -99,3 +99,146 @@ a {
     transform: translateY(-15px);
   }
 }
+
+.screen-reader{
+  width: var(--screenReaderWidth, 1px) !important;
+  height: var(--screenReaderHeight, 1px) !important;
+  padding: var(--screenReaderPadding, 0) !important;
+  border: var(--screenReaderBorder, none) !important;
+  
+  position: var(--screenReaderPosition, absolute) !important;
+  clip: var(--screenReaderClip, rect(1px, 1px, 1px, 1px)) !important;
+  overflow: var(--screenReaderOverflow, hidden) !important;
+  }
+  
+  
+  .popup:not(:target){
+  display: none;
+  }
+  
+  .popup:target{
+  width: 100%;
+  height: 100vh;
+  
+  display: flex;
+  
+  position: fixed;
+  top: 0;
+  right: 0;  
+  }
+  
+  .popup::before{
+  content: "";
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #0000005c;
+  
+  position: fixed;
+  left: 0;
+  top: 50%;
+  }
+  
+  .popup::after{
+  content: "";
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -1px;
+  }
+  
+  .popup__container{
+  box-sizing: border-box;  
+  padding: 0% 1%;
+  
+  height: calc(100vh - 40px); /* 1 */
+  margin: auto; /* 1 */
+  overflow: auto; /* 1 */
+  overscroll-behavior: contain; /* 1 */
+  }
+  
+  .popup__close{
+  width: 2rem;
+  height: 2rem;
+  
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-image: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Ffavpng.com%2Fpng_view%2Fwing-hand-interface-icon-basic-application-icon-close-icon-png%2FZ8amf4rN&psig=AOvVaw3NhV0lPlkwl5KLA74dytdD&ust=1638426959072000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNjt2Jv-wfQCFQAAAAAdAAAAABAE")
+  }
+  /*
+  animation
+  */
+  
+  .popup::before{
+  will-change: height, top;
+  animation: open-animation .6s cubic-bezier(0.83, 0.04, 0, 1.16) .65s both;
+  }
+  
+  .popup::after{
+  will-change: width, opacity;
+  animation: line-animation .6s cubic-bezier(0.83, 0.04, 0, 1.16) both;
+  }
+  
+  @keyframes line-animation{
+  
+  0%{
+    width: 0;
+    opacity: 1;
+  }
+  
+  99%{
+    width: 100%;
+    opacity: 1;
+  }
+  
+  100%{
+    width: 100%;
+    opacity: 0;
+  }  
+  }
+  
+  @keyframes open-animation{
+  
+  0%{
+    height: 0;
+    top: 50%;
+  }
+  
+  100%{
+    height: 100vh;
+    top: 0;
+  }
+  }
+  
+  .popup__container{
+  animation: fade .5s ease-out 1.3s both;
+  }
+  
+  @keyframes fade{
+  
+  0%{
+    opacity: 0;
+  }
+  
+  100%{
+    opacity: 1;
+  }
+  }
+  
+  .open-popup{
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: .75rem 1.25rem;
+  border: 1px solid;
+  }
+  
+  

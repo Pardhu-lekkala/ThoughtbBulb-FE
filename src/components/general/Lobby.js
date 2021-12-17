@@ -9,53 +9,9 @@ import { HiOutlineUser } from "react-icons/hi";
 import useWindowDimensions from "./useWindowDimensions";
 import Fade from "@material-ui/core/Fade";
 import { withStyles } from "@material-ui/core/styles";
+import { RiCloseFill } from "react-icons/ri";
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Paper from "@material-ui/core/Paper";
-import Draggable from "react-draggable";
-
-// import { withStyles, makeStyles } from '@material-ui/core/styles';
-// import Typography from '@material-ui/core/Typography';
-
-/* function updatePointer(windowWidth, windowHeight, image, target) {
-  // Get largest dimension increase
-  var xScale = windowWidth / image.width;
-  var yScale = windowHeight / image.height;
-  var scale;
-  var yOffset = 0;
-  var xOffset = 0;
-
-  if (xScale > yScale) {
-    // The image fits perfectly in x axis, stretched in y
-    scale = xScale;
-    yOffset = (windowHeight - image.height * scale) / 2;
-  } else {
-    // The image fits perfectly in y axis, stretched in x
-    scale = yScale;
-    xOffset = (windowWidth - image.width * scale) / 2;
-  }
-
-  //pointer.css("top", target.y * scale + yOffset);
-  //pointer.css("left", target.x * scale + xOffset);
-  return {
-    top: `${target.y * scale + yOffset}px`,
-    left: `${target.x * scale + xOffset}px`,
-  };
-} */
-function PaperComponent(props) {
-  return (
-    <Draggable
-      handle="#draggable-dialog-title"
-      cancel={'[class*="MuiDialogContent-root"]'}
-    >
-      <Paper {...props} />
-    </Draggable>
-  );
-}
+import ReactPlayer from "react-player";
 
 function updatePointer2(makrw, makrh, imagew, imageh) {
   let width = Math.max(
@@ -67,16 +23,10 @@ function updatePointer2(makrw, makrh, imagew, imageh) {
     window.innerHeight || 0
   );
 
-  // console.clear();
-  //console.log(width, height);
-
   const neww = (makrw / imagew) * width;
   const newh = (makrh / imageh) * height;
   let obj = { X: neww, Y: newh };
 
-  //console.log({ X: (obj.X ^ 0) - 10, Y: (obj.Y ^ 0) - 10 });
-
-  //<div class="marker1" style="position: absolute; top: 86px; left: 673px; width: 10px; height: 10px; background: rgb(255, 0, 0);"></div>
   const radiusw = (22 / imagew) * width;
   const radiush = (22 / imageh) * height;
   return {
@@ -84,23 +34,20 @@ function updatePointer2(makrw, makrh, imagew, imageh) {
     left: `${(obj.X ^ 0) - radiusw}px`,
   };
 }
-// function color(id){
-//   console.log("jhbjvjvjvjjvvj",id);
-// }
+
 function Lobby({ history, project }) {
   const page = project.pages.find((e) => e.id === project.homepage);
   const classes = useStyles();
   const [tooltipIsOpen, setTooltipIsOpen] = React.useState(true);
   const [LabelIsOpen, setLabelIsOpen] = React.useState(true);
-  const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    document.getElementById("tooltips").href = "#popup-article";
     setLabelIsOpen(false);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    document.getElementById("tooltips").href = "";
     setLabelIsOpen(true);
   };
 
@@ -112,14 +59,11 @@ function Lobby({ history, project }) {
 
   const { height, width } = useWindowDimensions();
 
-  // This ref is connected to the BG
   const BGRef = React.useRef();
 
-  // The size of the BG // It will be updated later
   const [BGwidth, setBGWidth] = React.useState();
   const [BGheight, setBGHeight] = React.useState();
   const [url, setUrl] = React.useState("");
-  //const [isHover, setIsHover] = React.useState(false);
 
   const isHover = false;
 
@@ -171,7 +115,6 @@ function Lobby({ history, project }) {
         ref={BGRef}
       >
         <source src={localStorage.getItem("lobby")} type="video/mp4" />
-        {/* <source src={page?.backgroundVideo?.url} type="video/mp4" /> */}
         Your browser does not support HTML5 video.
       </video>
 
@@ -198,20 +141,11 @@ function Lobby({ history, project }) {
                       placement="top"
                       arrow
                     >
-                      <span
+                      <a
+                        href="#"
                         className={classes.pulseAnimation}
                         id={index}
-                        // onMouseEnter={() => {
-                        // setIsHover(true);
-                        // color({index});
-                        // color(this.id)
-                        // this.style.background="yellow";
-                        // }}
-                        // onMouseLeave={() => {
-                        // setIsHover(false);
-                        // Colorout(this.index)
-                        // this.style.background="red"
-                        // }}
+                        id="tooltips"
                         style={{
                           backgroundColor: isHover
                             ? project.primaryColor
@@ -228,14 +162,15 @@ function Lobby({ history, project }) {
                           left: updatePointer2(
                             +item?.markerPosition?.split(",")[0],
                             +item?.markerPosition?.split(",")[1],
-                            //320,574, //funzone
-                            // 652, 530, //beach
-                            //946, 614, //helpdesk
                             page?.backgroundImage?.width,
                             page?.backgroundImage?.height
                           ).left,
                         }}
                         onClick={() => {
+                          setTooltipIsOpen(false);
+                          let scrollDown =
+                            document.getElementById("profile-menu");
+                          scrollDown.style.display = "none";
                           if (item.destinationType === "PDF") {
                             setUrl(item.destinationLink);
                             handleClickOpen();
@@ -260,7 +195,7 @@ function Lobby({ history, project }) {
                                 });
                           }
                         }}
-                      ></span>
+                      ></a>
                     </NewTooltip>
                   </Tooltip>
                   <video
@@ -296,16 +231,10 @@ function Lobby({ history, project }) {
                       TransitionComponent={Fade}
                       TransitionProps={{ timeout: 400 }}
                     >
-                      <span
-                        id={index}
+                      <a
+                        href="#"
+                        id="tooltips"
                         className={classes.pulseAnimation}
-                        // onMouseEnter={() => {
-                        //   setIsHover(true);
-                        // }}
-                        // onMouseLeave={() => {
-
-                        //   setIsHover(false);
-                        // }}
                         style={{
                           backgroundColor: isHover
                             ? project.primaryColor
@@ -322,21 +251,18 @@ function Lobby({ history, project }) {
                           left: updatePointer2(
                             +item?.markerPosition?.split(",")[0],
                             +item?.markerPosition?.split(",")[1],
-                            //320,574, //funzone
-                            // 652, 530, //beach
-                            //946, 614, //helpdesk
                             page?.backgroundImage?.width,
                             page?.backgroundImage?.height
                           ).left,
                         }}
                         onClick={() => {
+                          setTooltipIsOpen(false);
                           let scrollDown =
                             document.getElementById("profile-menu");
                           scrollDown.style.display = "none";
                           if (item.destinationType === "PDF") {
-                            document.getElementById(
-                              "modalContent"
-                            ).style.display = "block";
+                            setUrl(item.destinationLink);
+                            handleClickOpen();
                           } else if (item.destinationType === "link") {
                             window.open(item.destinationLink);
                           } else {
@@ -355,7 +281,7 @@ function Lobby({ history, project }) {
                                 });
                           }
                         }}
-                      ></span>
+                      ></a>
                     </NewTooltip>
                   </Tooltip>
                   <video
@@ -367,50 +293,31 @@ function Lobby({ history, project }) {
               );
             }
           })}
+
           <div>
-            {/* <Backdrop open={open} onClose={handleClose}>
-              <embed
-                src={url}
-                type="application/pdf"
-                height={800}
-                width={500}
-              />
-            </Backdrop> */}
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              PaperComponent={PaperComponent}
-              aria-labelledby="draggable-dialog-title"
-              style={{ width: "90vw", height: "90vh" }}
-            >
-              <DialogTitle
-                style={{ cursor: "move" }}
-                id="draggable-dialog-title"
-              ></DialogTitle>
-              <DialogContent>
-                <DialogContentText>
+            <div id="popup-article" class="popup">
+              <div class="popup__container">
+                <a
+                  href="#"
+                  class="popup__close"
+                  onClick={() => {
+                    handleClose();
+                    let scrollDown = document.getElementById("profile-menu");
+                    scrollDown.style.display = "block";
+                  }}
+                >
+                  <RiCloseFill size={30} />
+                </a>
+                <div class="popup__content">
                   <iframe
-                    src={url}
-                    style={{ width: "40vw", height: "60vh" }}
-                    //style={{ width: "90vw", height: "90vh" }}
-                    //style={{ width: "90%", height: "90%" }}
-                    frameborder="0"
                     title="iframe"
-                  ></iframe>
-                  {/* <embed
                     src={url}
-                    type="application/pdf"
-                    height={800}
-                    width={500}
-                  /> */}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button autoFocus onClick={handleClose} color="primary">
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
+                    style={{ width: "90vw", height: "90vh" }}
+                    frameborder="0"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div
@@ -433,6 +340,7 @@ function Lobby({ history, project }) {
           >
             <div class="profile-menu-header">
               <Tooltip
+                arrow
                 title={<b style={{ fontSize: "0.8vw" }}>{loginCredentials}</b>}
                 placement="left"
               >
@@ -516,6 +424,32 @@ function Lobby({ history, project }) {
               </div>
             </div>
           </div>
+
+          {page?.video_areas?.map((item) => {
+            const pointerObj = updatePointer2(
+              +item?.position?.split(",")[0],
+              +item?.position?.split(",")[1],
+              +item?.position?.split(",")[2],
+              +item?.position?.split(",")[3],
+              page?.backgroundImage?.width,
+              page?.backgroundImage?.height
+            );
+            return (
+              <>
+                <ReactPlayer
+                  url={item.videoURL}
+                  height={pointerObj.height}
+                  width={pointerObj.width}
+                  controls={true}
+                  style={{
+                    position: "relative",
+                    top: pointerObj.Y1,
+                    left: pointerObj.X1,
+                  }}
+                />
+              </>
+            );
+          })}
         </>
       </header>
 

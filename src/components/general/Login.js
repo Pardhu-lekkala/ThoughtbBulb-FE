@@ -5,7 +5,6 @@ import useStyles from "./useStylesLogin";
 import Tooltip from "@material-ui/core/Tooltip";
 import ReactPlayer from "react-player";
 
-// import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -88,22 +87,17 @@ function Login({
   function validation() {
     let email = document.getElementById("email").value;
     let form = document.getElementById("form");
-    // let text= document.getElementById('text');
     let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
     if (email.match(pattern)) {
       form.classList.add("valid");
       form.classList.remove("invalid");
-      // text.innerHTML="Your Email is valid";
-      // text.style.color="green";
       localStorage.setItem("email", email);
       setStart(false);
       setVideoNo(1);
     } else {
       form.classList.remove("valid");
       form.classList.add("invalid");
-      // text.innerHTML="please enter a valid email";
-      // text.style.color="red";
       setTooltipIsOpen(true);
     }
   }
@@ -124,20 +118,16 @@ function Login({
   React.useEffect(() => {
     if (project?.backgroundVideo?.url) {
       axios
-        .get(
-          //`https://platoodemo.s3.ap-south-1.amazonaws.com/assets/LoginSignupLoop.mp4`,
-          `${project.backgroundVideo.url}`,
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods":
-                "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-              "Access-Control-Allow-Headers":
-                "Origin, Content-Type, X-Auth-Token",
-            },
-            responseType: "blob",
-          }
-        )
+        .get(`${project.backgroundVideo.url}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":
+              "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers":
+              "Origin, Content-Type, X-Auth-Token",
+          },
+          responseType: "blob",
+        })
         .then(async (response) => {
           const URL = window.URL || window.webkitURL;
           const url = URL.createObjectURL(
@@ -148,20 +138,16 @@ function Login({
         });
 
       axios
-        .get(
-          //`https://platoodemo.s3.ap-south-1.amazonaws.com/assets/LoginSignupTransition.mp4`,
-          `${project.transVideo.url}`,
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods":
-                "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-              "Access-Control-Allow-Headers":
-                "Origin, Content-Type, X-Auth-Token",
-            },
-            responseType: "blob",
-          }
-        )
+        .get(`${project.transVideo.url}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":
+              "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers":
+              "Origin, Content-Type, X-Auth-Token",
+          },
+          responseType: "blob",
+        })
         .then((response) => {
           const URL = window.URL || window.webkitURL;
           const url = URL.createObjectURL(
@@ -170,14 +156,11 @@ function Login({
           setLoginSignupTransition(url);
         });
 
-      axios
-        .get(
-          //`https://platoodemo.s3.ap-south-1.amazonaws.com/assets/LoginSignupTransition.mp4`,
-          `${
-            project?.pages.find((e) => e.id === project.homepage)
-              ?.backgroundVideo?.url
-          }`,
-          {
+      const t = project?.pages.find((e) => e.id === project.homepage)
+        ?.backgroundVideo?.url;
+      if (t) {
+        axios
+          .get(`${t}`, {
             headers: {
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -186,39 +169,30 @@ function Login({
                 "Origin, Content-Type, X-Auth-Token",
             },
             responseType: "blob",
-          }
-        )
-        .then((response) => {
-          const URL = window.URL || window.webkitURL;
-          const url = URL.createObjectURL(
-            new Blob([response.data], { type: "video/mp4" })
-          );
-          localStorage.setItem("lobby", url);
-          setLobbyLoopVideo(url);
-        });
+          })
+          .then((response) => {
+            const URL = window.URL || window.webkitURL;
+            const url = URL.createObjectURL(
+              new Blob([response.data], { type: "video/mp4" })
+            );
+            localStorage.setItem("lobby", url);
+            setLobbyLoopVideo(url);
+          });
+      } else {
+        setLobbyLoopVideo("No Video");
+      }
     }
   }, [project]);
 
   React.useEffect(() => {
-    // timeout1=
     setTimeout(() => {
       setStart(true);
     }, 5000);
 
-    // function tooltip(){
-    // timeout2=
     setTimeout(function () {
       setStart(false);
     }, 15000);
-
-    // return () => {
-    //   clearTimeout(timeout1);
-    //   clearTimeout(timeout2);
-    // };
   }, []);
-
-  // }
-  // tooltip();
 
   return (
     <>
@@ -247,7 +221,6 @@ function Login({
                         <b
                           style={{
                             color: "white",
-                            //background: "white",
                             fontSize: "1.2vw",
                           }}
                         >
@@ -267,8 +240,6 @@ function Login({
                         variant="outlined"
                         style={{ color: "black", backgroundColor: "white" }}
                         onClick={() => {
-                          //  let text= document.getElementById('text');
-                          //  text.innerHTML="";
                           setTooltipIsOpen(false);
                           setStart(false);
                         }}
@@ -276,8 +247,6 @@ function Login({
                     </Tooltip>
                   </Tooltip>
                 </Grid>
-                {/* <span id="text" style={{fontWeight:"bolder", backgroundColor:"white", marginLeft:"20px"}}>
-                </span> */}
                 <Grid item xs={12}>
                   <Button
                     className="loginbtn"
