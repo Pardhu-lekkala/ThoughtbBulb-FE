@@ -36,7 +36,10 @@ function updatePointer2(makrw, makrh, imagew, imageh) {
 }
 
 function Lobby({ history, project }) {
-  const page = project.pages.find((e) => e.id === project.homepage);
+  let page = project.pages.find((e) => e.id === project.homepage);
+  if (!page) {
+    page = project.pages[0];
+  }
   const classes = useStyles();
   const [tooltipIsOpen, setTooltipIsOpen] = React.useState(true);
   const [LabelIsOpen, setLabelIsOpen] = React.useState(true);
@@ -188,11 +191,7 @@ function Lobby({ history, project }) {
                                   src: item.TransVideo.url,
                                   pageId: item.destinationPage,
                                 })
-                              : setVideoNo({
-                                  no: 1,
-                                  src: item.TransVideo.url,
-                                  pageId: item.destinationPage,
-                                });
+                              : history.push(`/page/${item.destinationPage}`);
                           }
                         }}
                       ></a>
@@ -274,11 +273,7 @@ function Lobby({ history, project }) {
                                   src: item.TransVideo.url,
                                   pageId: item.destinationPage,
                                 })
-                              : setVideoNo({
-                                  no: 1,
-                                  src: item.TransVideo.url,
-                                  pageId: item.destinationPage,
-                                });
+                              : history.push(`/page/${item.destinationPage}`);
                           }
                         }}
                       ></a>
@@ -313,7 +308,7 @@ function Lobby({ history, project }) {
                     title="iframe"
                     src={url}
                     style={{ width: "90vw", height: "90vh" }}
-                    frameborder="0"
+                    frameBorder="0"
                   ></iframe>
                 </div>
               </div>

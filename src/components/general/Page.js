@@ -198,9 +198,9 @@ function Page({ history, match, project }) {
                       <a
                         id="link"
                         onClick={() => {
-                          if (item.id == project.homepage) {
+                          if (item.id === project.homepage) {
                             history.push(`/lobby`);
-                          } else if (item.id == match.params.pageId) {
+                          } else if (item.id === match.params.pageId) {
                             alert(`already in ${item.pageName}`);
                           } else {
                             history.push(`/page/${item.id}`);
@@ -356,11 +356,7 @@ function Page({ history, match, project }) {
                                     src: item.TransVideo.url,
                                     pageId: item.destinationPage,
                                   })
-                                : setVideoNo({
-                                    no: 1,
-                                    src: item.TransVideo.url,
-                                    pageId: item.destinationPage,
-                                  });
+                                : history.push(`/page/${item.destinationPage}`);
                             }
                           }}
                         ></a>
@@ -444,11 +440,7 @@ function Page({ history, match, project }) {
                                     src: item.TransVideo.url,
                                     pageId: item.destinationPage,
                                   })
-                                : setVideoNo({
-                                    no: 1,
-                                    src: item.TransVideo.url,
-                                    pageId: item.destinationPage,
-                                  });
+                                : history.push(`/page/${item.destinationPage}`);
                             }
                           }}
                         ></a>
