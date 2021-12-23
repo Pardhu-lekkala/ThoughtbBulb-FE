@@ -110,6 +110,7 @@ function Lobby({ history, project }) {
   return (
     <>
       <video
+        disablePictureInPicture
         poster={page?.backgroundImage?.url}
         className={classes.lobbyBG}
         autoPlay
@@ -198,6 +199,7 @@ function Lobby({ history, project }) {
                     </NewTooltip>
                   </Tooltip>
                   <video
+                    disablePictureInPicture
                     src={item.TransVideo ? item.TransVideo.url : ""}
                     preload="auto"
                     style={{ display: "none" }}
@@ -280,6 +282,7 @@ function Lobby({ history, project }) {
                     </NewTooltip>
                   </Tooltip>
                   <video
+                    disablePictureInPicture
                     src={item.TransVideo ? item.TransVideo.url : ""}
                     preload="auto"
                     style={{ display: "none" }}
@@ -451,6 +454,7 @@ function Lobby({ history, project }) {
       {videoNo.no === 1 && (
         <>
           <video
+            disablePictureInPicture
             poster={page?.backgroundImage?.url}
             autoPlay
             className={classes.transitionLoop}

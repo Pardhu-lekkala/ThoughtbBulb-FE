@@ -19,6 +19,8 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
+import { Mixpanel } from "../../utils/Mixpanel";
+
 function LinearProgressWithLabel(props) {
   return (
     <Box
@@ -93,6 +95,11 @@ function Login({
       form.classList.add("valid");
       form.classList.remove("invalid");
       localStorage.setItem("email", email);
+      Mixpanel.identify(email);
+      Mixpanel.track("Successful login", { data: { email } });
+      Mixpanel.people.set({
+        $email: email,
+      });
       setStart(false);
       setVideoNo(1);
     } else {
@@ -133,6 +140,11 @@ function Login({
           const url = URL.createObjectURL(
             new Blob([response.data], { type: "video/mp4" })
           );
+
+          Mixpanel.track("back", {
+            data: {msg: "Succesfull request"},
+            statusCode: response?.statusCode,
+          });
 
           setLoginSignupLoop(url);
         });
@@ -202,7 +214,13 @@ function Login({
         <LinearWithValueLabel />
       ) : (
         <>
-          <video autoPlay muted loop className={classes.LoginSignupLoop}>
+          <video
+            disablePictureInPicture
+            autoPlay
+            muted
+            loop
+            className={classes.LoginSignupLoop}
+          >
             <source src={LoginSignupLoopMP4} type="video/mp4" />
             Your browser does not support HTML5 video.
           </video>

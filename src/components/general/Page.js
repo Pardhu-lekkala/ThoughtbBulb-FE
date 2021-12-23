@@ -274,6 +274,7 @@ function Page({ history, match, project }) {
             <BiArrowBack size={25} />
           </Button>
           <video
+            disablePictureInPicture
             poster={page?.backgroundImage?.url}
             className={classes.pageBG}
             autoPlay
@@ -363,6 +364,7 @@ function Page({ history, match, project }) {
                       </NewTooltip>
                     </Tooltip>
                     <video
+                      disablePictureInPicture
                       src={item.TransVideo ? item.TransVideo.url : ""}
                       preload="auto"
                       style={{ display: "none" }}
@@ -447,6 +449,7 @@ function Page({ history, match, project }) {
                       </NewTooltip>
                     </Tooltip>
                     <video
+                      disablePictureInPicture
                       src={item.TransVideo ? item.TransVideo.url : ""}
                       preload="auto"
                       style={{ display: "none" }}
@@ -569,6 +572,7 @@ function Page({ history, match, project }) {
           {videoNo.no === 1 && (
             <>
               <video
+                disablePictureInPicture
                 poster={page?.backgroundImage?.url}
                 autoPlay
                 className={classes.transitionLoop}
