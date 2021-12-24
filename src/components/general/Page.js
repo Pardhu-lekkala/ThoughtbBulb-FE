@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useLocation } from "react-router-dom";
 
 import { withStyles } from "@material-ui/core/styles";
 import Fade from "@material-ui/core/Fade";
@@ -118,6 +119,9 @@ function Page({ history, match, project }) {
   }, []);
   let icon = 0;
   let loginCredentials = localStorage.getItem("email");
+  let location = useLocation();
+  console.log(location.pathname, "this is location");
+  console.log(history.location.pathname, "this is is history path");
 
   const [isChatOpen, setChatOpen] = React.useState(true);
   const [hideChatSpinner, setHideChatSpinner] = React.useState(false);
@@ -294,20 +298,18 @@ function Page({ history, match, project }) {
                     <Tooltip
                       key={index}
                       title={
-                        <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                        <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
                       }
-                      placement="top"
+                      placement="right"
                       arrow
                       open={LabelIsOpen}
                     >
                       <NewTooltip
                         key={index}
                         title={
-                          <b style={{ fontSize: "0.8vw" }}>
-                            {item.markerLabel}
-                          </b>
+                          <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
                         }
-                        placement="top"
+                        placement="right"
                         arrow
                       >
                         <a
@@ -351,13 +353,18 @@ function Page({ history, match, project }) {
                               scrollDown.style.display = "none";
                               setLabelIsOpen(false);
                               setTooltipIsOpen(false);
-                              item.TransVideo
-                                ? setVideoNo({
-                                    no: 1,
-                                    src: item.TransVideo.url,
-                                    pageId: item.destinationPage,
-                                  })
-                                : history.push(`/page/${item.destinationPage}`);
+                              if (item.TransVideo) {
+                                setVideoNo({
+                                  no: 1,
+                                  src: item.TransVideo.url,
+                                  pageId: item.destinationPage,
+                                });
+                              } else {
+                                history.push(`/page/${item.destinationPage}`);
+                                window.location.reload();
+                              }
+
+                              //window.location.reload();
                             }
                           }}
                         ></a>
@@ -377,9 +384,9 @@ function Page({ history, match, project }) {
                     <Tooltip
                       key={index}
                       title={
-                        <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                        <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
                       }
-                      placement="top"
+                      placement="right"
                       arrow
                       leaveDelay={300}
                       TransitionComponent={Fade}
@@ -578,6 +585,7 @@ function Page({ history, match, project }) {
                 className={classes.transitionLoop}
                 onEnded={() => {
                   history.push(`/page/${videoNo.pageId}`);
+                  window.location.reload();
                 }}
                 style={{ zIndex: videoNo.no === 1 ? 1000 : "" }}
               >
@@ -596,11 +604,27 @@ function Page({ history, match, project }) {
                   borderRadius: "15px",
                 }}
                 onClick={
-                  (() => setVideoNo(0),
+                  // (() => setVideoNo(0),
                   () => {
+                    setVideoNo(0);
                     history.push(`/page/${videoNo.pageId}`);
-                  })
+                    window.location.reload();
+                  }
                 }
+                // onClick={() => {
+                //   setVideoNo(0);
+                //   console.log(videoNo.pageId, "skip clicked");
+                //   history.push(`/page/${videoNo.pageId}`);
+                // }}
+                // onClick={
+                //   (() => setVideoNo(0),
+                //    () => {
+                //      console.log(videoNo.pageId, "skip clicked");
+                //      //setSkip(true);
+                //      history.push(`/page/${videoNo.pageId}`);
+                //      //window.location.reload();
+                //    })
+                // }
               >
                 skip
               </Button>

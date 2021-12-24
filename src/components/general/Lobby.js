@@ -131,18 +131,18 @@ function Lobby({ history, project }) {
                   <Tooltip
                     key={index}
                     title={
-                      <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                      <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
                     }
-                    placement="top"
+                    placement="right"
                     arrow
                     open={LabelIsOpen}
                   >
                     <NewTooltip
                       key={index}
                       title={
-                        <b style={{ fontSize: "0.8vw" }}>{item.markerLabel}</b>
+                        <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
                       }
-                      placement="top"
+                      placement="right"
                       arrow
                     >
                       <a

@@ -6,7 +6,8 @@ mixpanel.init("8abc5e4c00507779f17faaa9c10ca6b8", {
 });
 //mixpanel.init("YOUR_MIXPANEL_TOKEN");
 
-let env_check = process.env.NODE_ENV === "production";
+//let env_check = process.env.NODE_ENV === "production";
+let env_check = true;
 
 let actions = {
   identify: (id) => {

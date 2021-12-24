@@ -59,8 +59,8 @@ const useStyles = makeStyles((theme) => ({
   pulseAnimation: {
     //margin: "15px",
     display: "block",
-    width: "12px",
-    height: "12px",
+    width: "20px",
+    height: "20px",
     /* width: "10px",
     height: "10px", */
     // backgroundColor: "yellow",
@@ -69,9 +69,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     animation: "$pulse 2s infinite",
     float: "left",
-  
   },
-
 
   "@keyframes pulse": {
     "0%": {
