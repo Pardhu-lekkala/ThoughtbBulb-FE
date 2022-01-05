@@ -56,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
 
+  "& video::-webkit-media-controls-panel": {
+    display: "none",
+  },
+
   pulseAnimation: {
     //margin: "15px",
     display: "block",

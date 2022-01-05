@@ -8,6 +8,8 @@ import ReactPlayer from "react-player";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
@@ -52,6 +54,7 @@ function LinearProgressWithLabel(props) {
 
 function LinearWithValueLabel() {
   const [progress, setProgress] = React.useState(1);
+  const classes = useStyles();
 
   React.useEffect(() => {
     const timer = setInterval(() => {
@@ -65,9 +68,110 @@ function LinearWithValueLabel() {
   }, []);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <LinearProgressWithLabel value={progress} />
-    </Box>
+    <>
+      <Box sx={{ width: "100%" }}>
+        <LinearProgressWithLabel value={progress} />
+        {console.log(progress, "this is load percent")}
+      </Box>
+      <Box
+        sx={{ display: "flex", alignItems: "center" }}
+        className={classes.loadtext}
+        // style={{
+        //   position: "fixed",
+        //   left: "41%",
+        //   top: "48%",
+        //   zIndex: 1000,
+        //   height: "50px",
+        //   width: "100%",
+        //   color: "",
+        // }}
+      >
+        {progress < 5 ? (
+          <h1
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontSize: "20px",
+              marginLeft: "4%",
+            }}
+          >
+            Please wait while the minions do their work
+          </h1>
+        ) : null}
+        {progress > 5 && progress < 25 ? (
+          <h1
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontSize: "20px",
+              marginLeft: "4%",
+            }}
+          >
+            Grabbing extra minions
+          </h1>
+        ) : null}
+        {progress > 25 && progress < 45 ? (
+          <h1
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontSize: "20px",
+              marginLeft: "4%",
+            }}
+          >
+            Doing the heavy lifting
+          </h1>
+        ) : null}
+        {progress > 45 && progress < 65 ? (
+          <h1
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontSize: "20px",
+              marginLeft: "4%",
+            }}
+          >
+            We are working very hard..Really
+          </h1>
+        ) : null}
+        {progress > 65 && progress < 75 ? (
+          <h1
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontSize: "20px",
+              marginLeft: "4%",
+            }}
+          >
+            Waking up the minions
+          </h1>
+        ) : null}
+        {progress > 75 && progress < 85 ? (
+          <h1
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontSize: "20px",
+              marginLeft: "4%",
+            }}
+          >
+            You are number 2843684714 in the queue
+          </h1>
+        ) : null}
+        {progress > 85 && progress <= 100 ? (
+          <h1
+            style={{
+              fontFamily: "roboto",
+              fontStyle: "normal",
+              fontSize: "20px",
+              marginLeft: "4%",
+            }}
+          >
+            I swear it's almost done.Enjoy!
+          </h1>
+        ) : null}
+      </Box>
+    </>
   );
 }
 
@@ -142,7 +246,7 @@ function Login({
           );
 
           Mixpanel.track("back", {
-            data: {msg: "Succesfull request"},
+            data: { msg: "Succesfull request" },
             statusCode: response?.statusCode,
           });
 
@@ -216,6 +320,8 @@ function Login({
         <>
           <video
             disablePictureInPicture
+            controls={false}
+            controlsList="nodownload"
             autoPlay
             muted
             loop
@@ -304,6 +410,9 @@ function Login({
                 controls={false}
                 width="100%"
                 height="auto"
+                // onEnablePIP={false}
+                // onDisablePIP={true}
+                // pip={false}
                 className={classes.LoginSignupLoop}
                 onEnded={() => {
                   history.push("/Lobby");

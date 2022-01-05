@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
   },
+
+  "& video::-webkit-media-controls-panel": {
+    display: "none",
+  },
+
   viewportHeader: {
     position: "relative",
     height: "100vh",

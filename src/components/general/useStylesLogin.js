@@ -12,8 +12,44 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     bottom: 0,
     minWidth: "100%",
-    minHeight: "100%", */
+    minHeight: "100%",
+    
+    "& p": {
+      margin: 0,
+      "&$title": {
+        margin: "0 0 16px"
+      }
+    }
+    
+    */
   },
+
+  "& video::-webkit-media-controls-panel": {
+    display: "none",
+  },
+
+  loadtext: {
+    position: "fixed",
+    left: "41%",
+    top: "48%",
+    zIndex: 1000,
+    height: "50px",
+    width: "100%",
+    ["@media (max-width:730px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      top: "57%",
+      left: "41%",
+    },
+  },
+
+  // loadtext: {
+  //   position: "fixed",
+  //   left: "41%",
+  //   top: "48%",
+  //   zIndex: 1000,
+  //   height: "50px",
+  //   width: "100%",
+  // },
 
   viewportHeader: {
     position: "relative",

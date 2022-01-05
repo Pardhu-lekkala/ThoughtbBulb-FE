@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Panellum from "./pages/penellumTest";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
-import { MdScreenRotation} from "react-icons/md";
+import { MdScreenRotation } from "react-icons/md";
 
 //import PrivateRoute from "./utils/components/PrivateRoute";
 import {
@@ -17,6 +18,8 @@ import NotFound from "./utils/components/404";
 //import amplifyConfig from "./config/amplifyDev";
 //import amplifyConfig from "./config/amplify";
 import ClientSnackbar from "./utils/components/ClientSnackbar";
+import roundMe from "./pages/roundme";
+import RoundMe from "./pages/roundme";
 
 const theme = createMuiTheme({
   palette: {
@@ -51,40 +54,39 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [isLandscape,setIsLandscape]= React.useState(true)
+  const [isLandscape, setIsLandscape] = React.useState(true);
   // if (window.innerHeight > window.innerWidth) {
   //   k = true;
   // } else {
   //   k = false;
   // }
- 
+
   function handleResize() {
     if (window.innerHeight > window.innerWidth) {
-      setIsLandscape(true)
+      setIsLandscape(true);
     } else {
-            setIsLandscape(false)
+      setIsLandscape(false);
     }
   }
-  
+
   useEffect(() => {
     if (window.innerHeight > window.innerWidth) {
-      setIsLandscape(true)
+      setIsLandscape(true);
     } else {
-      
-      setIsLandscape(false)
+      setIsLandscape(false);
     }
     window.addEventListener("resize", handleResize);
-  },[]);
+  }, []);
 
   if (isLandscape) {
     return (
       <div className="App">
         <MuiThemeProvider theme={theme}>
-          <div style={{textAlign:"center"}}>
-          <h1 style={{ padding: "5vw" }}>
-            Please Use Your Device In LandScape Mode Only
-          </h1>
-          <MdScreenRotation size="40%" style={{marginTop:"10vh"}}/>
+          <div style={{ textAlign: "center" }}>
+            <h1 style={{ padding: "5vw" }}>
+              Please Use Your Device In LandScape Mode Only
+            </h1>
+            <MdScreenRotation size="40%" style={{ marginTop: "10vh" }} />
           </div>
         </MuiThemeProvider>
       </div>
@@ -99,9 +101,15 @@ function App() {
               {/* <PrivateRoute path="/" component={Overview} exact={true} /> */}
 
               {/* GENERAL */}
-              <Route path="/static/:accesscode" component={Login} exact={true} />
+              <Route
+                path="/static/:accesscode"
+                component={Login}
+                exact={true}
+              />
               <Route path="/Lobby" component={Lobby} exact={true} />
               <Route path="/Auditorium" component={Auditorium} exact={true} />
+              <Route path="/roundme" component={RoundMe} exact={true} />
+              <Route path="/360degree" component={Panellum} exact={true} />
               <Route path="/page/:pageId" component={Page} exact={true} />
               <Route path="/:accesscode" component={Login} exact={true} />
 

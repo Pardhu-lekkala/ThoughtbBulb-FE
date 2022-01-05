@@ -279,6 +279,8 @@ function Page({ history, match, project }) {
           </Button>
           <video
             disablePictureInPicture
+            controls={false}
+            controlsList="nodownload"
             poster={page?.backgroundImage?.url}
             className={classes.pageBG}
             autoPlay
@@ -372,6 +374,8 @@ function Page({ history, match, project }) {
                     </Tooltip>
                     <video
                       disablePictureInPicture
+                      controls={false}
+                      controlsList="nodownload"
                       src={item.TransVideo ? item.TransVideo.url : ""}
                       preload="auto"
                       style={{ display: "none" }}
@@ -457,6 +461,8 @@ function Page({ history, match, project }) {
                     </Tooltip>
                     <video
                       disablePictureInPicture
+                      controls={false}
+                      controlsList="nodownload"
                       src={item.TransVideo ? item.TransVideo.url : ""}
                       preload="auto"
                       style={{ display: "none" }}
@@ -482,6 +488,9 @@ function Page({ history, match, project }) {
                     height={pointerObj.height}
                     width={pointerObj.width}
                     controls={true}
+                    // onEnablePIP={false}
+                    // onDisablePIP={true}
+                    // pip={false}
                     style={{
                       position: "relative",
                       top: pointerObj.Y1,
@@ -580,6 +589,8 @@ function Page({ history, match, project }) {
             <>
               <video
                 disablePictureInPicture
+                controls={false}
+                controlsList="nodownload"
                 poster={page?.backgroundImage?.url}
                 autoPlay
                 className={classes.transitionLoop}
