@@ -128,9 +128,9 @@ function Lobby({ history, project }) {
   //   //setPage(project.pages[0]);
   // }, [project]);
 
-  // if (!page) {
-  //   page = project.pages[0];
-  // }
+  if (!page) {
+    page = project.pages[0];
+  }
   const classes = useStyles();
   const [tooltipIsOpen, setTooltipIsOpen] = React.useState(true);
   const [LabelIsOpen, setLabelIsOpen] = React.useState(true);

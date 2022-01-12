@@ -24,10 +24,6 @@ const useStyles = makeStyles((theme) => ({
     */
   },
 
-  "& video::-webkit-media-controls-panel": {
-    display: "none",
-  },
-
   loadtext: {
     position: "fixed",
     left: "41%",
@@ -35,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1000,
     height: "50px",
     width: "100%",
-    ["@media (max-width:730px)"]: {
+    ["@media (max-width:920px)"]: {
       // eslint-disable-line no-useless-computed-key
-      top: "57%",
+      top: "60%",
       left: "41%",
     },
   },

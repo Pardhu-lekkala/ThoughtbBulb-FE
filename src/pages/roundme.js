@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Pannellum } from "pannellum-react";
 
 const RoundMe = (props) => {
   const history = useHistory();
@@ -13,32 +14,36 @@ const RoundMe = (props) => {
   return (
     <>
       <div>
-        {/* <button
-          style={{
-            backgroundColor: "lightgreen",
-            height: "30px",
-            width: "80px",
-            fontFamily: "roboto",
-            fontSize: "16px",
-            color: "black",
-            borderWidth: "0px",
-            borderRadius: "5px",
-          }}
-          onClick={goBack}
-        >
-          Back
-        </button> */}
-        <iframe
-          width="100%"
-          height="900px"
-          //src="https://roundme.com/embed/sS5z1911RPgCNbOI28pj"
-          src={videoUrl !== null || videoUrl !== "" ? videoUrl : null}
-          zIndex="1"
-          frameborder="0"
-          webkitallowfullscreen
-          mozallowfullscreen
-          allowfullscreen
-        ></iframe>
+        {videoUrl.includes("embed") ? (
+          <iframe
+            width="100%"
+            height="900px"
+            //src="https://roundme.com/embed/sS5z1911RPgCNbOI28pj"
+            src={videoUrl !== null || videoUrl !== "" ? videoUrl : null}
+            zIndex="1"
+            frameborder="0"
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowfullscreen
+          ></iframe>
+        ) : (
+          <Pannellum
+            width="100%"
+            height="100vh"
+            image={videoUrl}
+            pitch={10}
+            yaw={180}
+            hfov={110}
+            autoLoad
+            autoRotate={10}
+            showZoomCtrl={false}
+            //showControls={true}
+            onLoad={() => {
+              console.log("image loaded");
+            }}
+          />
+        )}
+
         <button
           onClick={() => {
             goBack();
