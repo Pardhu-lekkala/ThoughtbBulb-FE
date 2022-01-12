@@ -10,15 +10,15 @@ import useWindowDimensions from "./useWindowDimensions";
 import Fade from "@material-ui/core/Fade";
 import { withStyles } from "@material-ui/core/styles";
 import { RiCloseFill } from "react-icons/ri";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import { Typography } from "@mui/material";
+//import { styled } from "@mui/material/styles";
+//import Dialog from "@mui/material/Dialog";
+//import DialogContent from "@mui/material/DialogContent";
+//import DialogActions from "@mui/material/DialogActions";
+//import { Typography } from "@mui/material";
 import Swal from "sweetalert2";
 
 import ReactPlayer from "react-player";
-import { Grid } from "@material-ui/core";
+//import { Grid } from "@material-ui/core";
 
 function updatePointer2(makrw, makrh, imagew, imageh) {
   let width = Math.max(
@@ -210,6 +210,7 @@ function Lobby({ history, project }) {
             disablePictureInPicture
             controls={false}
             controlsList="nodownload"
+            playsInline
             poster={page?.backgroundImage?.url}
             className={classes.lobbyBG}
             autoPlay
@@ -340,6 +341,7 @@ function Lobby({ history, project }) {
                             disablePictureInPicture
                             controls={false}
                             controlsList="nodownload"
+                            playsInline
                             src={item.TransVideo ? item.TransVideo.url : ""}
                             preload="auto"
                             style={{ display: "none" }}
@@ -431,6 +433,7 @@ function Lobby({ history, project }) {
                             disablePictureInPicture
                             controls={false}
                             controlsList="nodownload"
+                            playsInline
                             src={item.TransVideo ? item.TransVideo.url : ""}
                             preload="auto"
                             style={{ display: "none" }}
@@ -600,6 +603,7 @@ function Lobby({ history, project }) {
                       height={pointerObj.height}
                       width={pointerObj.width}
                       controls={false}
+                      playsinline={true}
                       // onEnablePIP={false}
                       // onDisablePIP={true}
                       // pip={false}
@@ -626,6 +630,7 @@ function Lobby({ history, project }) {
                 disablePictureInPicture
                 controls={false}
                 controlsList="nodownload"
+                playsInline
                 poster={page?.backgroundImage?.url}
                 autoPlay
                 className={classes.transitionLoop}

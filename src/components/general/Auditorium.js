@@ -18,6 +18,10 @@ function Auditorium({ history }) {
   return (
     <>
       <video
+        disablePictureInPicture
+        controls={false}
+        controlsList="nodownload"
+        playsInline
         poster={AuditoriumImg}
         className={classes.AuditoriumBG}
         autoPlay

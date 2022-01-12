@@ -8,8 +8,8 @@ import ReactPlayer from "react-player";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
+// import Alert from "@mui/material/Alert";
+// import AlertTitle from "@mui/material/AlertTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
@@ -322,6 +322,7 @@ function Login({
             disablePictureInPicture
             controls={false}
             controlsList="nodownload"
+            playsInline
             autoPlay
             muted
             loop
@@ -406,6 +407,7 @@ function Login({
                 url={LoginSignupTransitionMP4}
                 autoPlay={true}
                 playing={true}
+                playsinline={true}
                 //muted={true}
                 controls={false}
                 width="100%"

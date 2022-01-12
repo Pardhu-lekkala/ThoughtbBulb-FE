@@ -281,6 +281,7 @@ function Page({ history, match, project }) {
             disablePictureInPicture
             controls={false}
             controlsList="nodownload"
+            playsInline
             poster={page?.backgroundImage?.url}
             className={classes.pageBG}
             autoPlay
@@ -376,6 +377,7 @@ function Page({ history, match, project }) {
                       disablePictureInPicture
                       controls={false}
                       controlsList="nodownload"
+                      playsInline
                       src={item.TransVideo ? item.TransVideo.url : ""}
                       preload="auto"
                       style={{ display: "none" }}
@@ -463,6 +465,7 @@ function Page({ history, match, project }) {
                       disablePictureInPicture
                       controls={false}
                       controlsList="nodownload"
+                      playsInline
                       src={item.TransVideo ? item.TransVideo.url : ""}
                       preload="auto"
                       style={{ display: "none" }}
@@ -488,6 +491,7 @@ function Page({ history, match, project }) {
                     height={pointerObj.height}
                     width={pointerObj.width}
                     controls={true}
+                    playsinline={true}
                     // onEnablePIP={false}
                     // onDisablePIP={true}
                     // pip={false}
@@ -591,6 +595,7 @@ function Page({ history, match, project }) {
                 disablePictureInPicture
                 controls={false}
                 controlsList="nodownload"
+                playsInline
                 poster={page?.backgroundImage?.url}
                 autoPlay
                 className={classes.transitionLoop}
