@@ -16,8 +16,9 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     top: 0,
     left: 0, */
-    //objectFit: "cover",
-    objectFit: "fill",
+    objectFit: "cover",
+    display: "block",
+    //objectFit: "fill",
     //width: "100vw",
     //height: "auto",
     position: "fixed",

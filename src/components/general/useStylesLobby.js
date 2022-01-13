@@ -10,8 +10,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   lobbyBG: {
-    //objectFit: "cover",
-    objectFit: "fill",
+    objectFit: "cover",
+    display: "block",
+    //objectFit: "fill",
     //width: "100vw",
     //height: "auto",
     position: "fixed",
@@ -19,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: "100%",
     height: "100%",
+    //resize: "AVLayerVideoGravity",
+
     /* position: "absolute",
     top: 0,
     bottom: 0,
