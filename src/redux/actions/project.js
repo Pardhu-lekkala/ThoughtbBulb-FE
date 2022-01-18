@@ -23,7 +23,10 @@ export const startSetProject = (accesscode) => {
 export const startSetProjectStatic = (accesscode) => {
   return async (dispatch) => {
     axios
-      .get(`https://conference-deploy.s3.amazonaws.com/${accesscode}.json`)
+      //.get(`https://conference-deploy.s3.amazonaws.com/${accesscode}.json`)
+      .get(
+        `https://conference-static-bucket.s3.us-east-2.amazonaws.com/${accesscode}.json`
+      )
       .then((response) => {
         dispatch(setProject(response.data));
       })
