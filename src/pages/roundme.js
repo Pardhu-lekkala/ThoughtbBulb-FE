@@ -11,6 +11,7 @@ const RoundMe = (props) => {
     history.push("/Lobby");
     //https://conference-project-db.s3.amazonaws.com/Login_Transition_Video_1b22166559.mp4https://conference-project-db.s3.amazonaws.com/Login_Transition_Video_1b22166559.mp4
   }
+
   return (
     <>
       <div>
@@ -31,18 +32,51 @@ const RoundMe = (props) => {
             width="100%"
             height="100vh"
             image={videoUrl}
-            pitch={10}
             yaw={180}
             hfov={110}
+            maxHfov={170}
+            minHfov={30}
             autoLoad
             autoRotate={10}
-            showZoomCtrl={false}
-            //showControls={true}
-            onLoad={() => {
-              console.log("image loaded");
-            }}
+            orientationOnByDefault={false}
+            compass
+            draggable
+            keyboardZoom
+            mouseZoom
+            showControls
+            showFullscreenCtrl
+            showZoomCtrl
+            //image="https://pannellum.org/images/charles-street.jpg"
+            // pitch={10}
+            // yaw={180}
+            // hfov={110}
+            // autoLoad
+            // autoRotate={10}
+            // showZoomCtrl={false}
+            // compass="true"
+            // showControls={true}
+            // onLoad={() => {
+            //   console.log("image loaded");
+            // }}
           />
         )}
+        {/* <Pannellum.Hotspot
+              type="info"
+              text="Tooltip routed to cumulations web"
+              pitch={31}
+              yaw={150}
+              name="hs1"
+              URL="www.cumulations.com"
+            />
+            <Pannellum.Hotspot
+              type="custom"
+              text="pardhu"
+              pitch={40}
+              yaw={160}
+              handleClick={(evt, name) => history.push("/Lobby")}
+              name="hs1"
+            />
+          </Pannellum> */}
 
         <button
           onClick={() => {

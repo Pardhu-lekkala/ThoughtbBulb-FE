@@ -179,7 +179,7 @@ function Page({ history, match, project }) {
               href="javascript:void(0);"
             >
               <HiOutlineUser
-                size={50}
+                size={40}
                 color="black"
                 style={{ paddingTop: "5px" }}
               />
