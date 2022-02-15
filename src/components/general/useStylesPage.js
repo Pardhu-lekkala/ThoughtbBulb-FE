@@ -9,16 +9,41 @@ const useStyles = makeStyles((theme) => ({
       margin: "0 auto",
     },
   },
+  // pageBG: {
+  //   /*  objectFit: "cover",
+  //   width: "100vw",
+  //   height: "auto",
+  //   position: "fixed",
+  //   top: 0,
+  //   left: 0, */
+  //   objectFit: "cover",
+  //   display: "block",
+  //   useSafeArea: false,
+  //   //objectFit: "fill",
+  //   //width: "100vw",
+  //   //height: "auto",
+  //   position: "fixed",
+  //   top: 0,
+  //   left: 0,
+  //   width: "100%",
+  //   height: "100%",
+  //   /* position: "absolute",
+  //   top: 0,
+  //   bottom: 0,
+  //   width: "100%",
+  //   height: "100%",
+  //   overflow: "hidden", */
+  // },
+  /****************admin css**************************** */
   pageBG: {
     /*  objectFit: "cover",
-    width: "100vw",
-    height: "auto",
-    position: "fixed",
-    top: 0,
-    left: 0, */
-    objectFit: "cover",
-    display: "block",
-    //objectFit: "fill",
+     width: "100vw",
+     height: "auto",
+     position: "fixed",
+     top: 0,
+     left: 0, */
+    //objectFit: "cover",
+    objectFit: "fill",
     //width: "100vw",
     //height: "auto",
     position: "fixed",
@@ -27,12 +52,13 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     /* position: "absolute",
-    top: 0,
-    bottom: 0,
-    width: "100%",
-    height: "100%",
-    overflow: "hidden", */
+     top: 0,
+     bottom: 0,
+     width: "100%",
+     height: "100%",
+     overflow: "hidden", */
   },
+  /********************************************** */
   viewportHeader: {
     position: "relative",
     height: "100vh",
@@ -60,6 +86,13 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: "100%",
     height: "100%",
+  },
+
+  customhotspot: {
+    height: "50px",
+    width: "50px",
+    backgroundImage:
+      "https://image.shutterstock.com/image-vector/pin-point-logo-can-be-600w-1679653036.jpg",
   },
 
   "& video::-webkit-media-controls-panel": {

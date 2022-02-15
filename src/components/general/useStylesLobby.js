@@ -9,10 +9,40 @@ const useStyles = makeStyles((theme) => ({
       margin: "0 auto",
     },
   },
+  // lobbyBG: {
+  //   objectFit: "cover",
+  //   display: "block",
+  //   useSafeArea: false,
+  //   //content: "width=device-width, initial-scale=1.0, viewport-fit=cover",
+  //   //viewportFit: "cover",
+  //   //padding: env(safe-area-inset-top),env(safe-area-inset-right),env(safe-area-inset-bottom) env(safe-area-inset-left);
+  //   //objectFit: "fill",
+  //   //width: "100vw",
+  //   //height: "auto",
+  //   position: "fixed",
+  //   top: 0,
+  //   left: 0,
+  //   width: "100%",
+  //   height: "100%",
+  //   //resize: "AVLayerVideoGravity",
+
+  //   /* position: "absolute",
+  //   top: 0,
+  //   bottom: 0,
+  //   width: "100%",
+  //   height: "100%",
+  //   overflow: "hidden", */
+  // },
+  /*****************admin css**************************** */
   lobbyBG: {
-    objectFit: "cover",
-    display: "block",
-    //objectFit: "fill",
+    /*  objectFit: "cover",
+     width: "100vw",
+     height: "auto",
+     position: "fixed",
+     top: 0,
+     left: 0, */
+    //objectFit: "cover",
+    objectFit: "fill",
     //width: "100vw",
     //height: "auto",
     position: "fixed",
@@ -20,15 +50,14 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: "100%",
     height: "100%",
-    //resize: "AVLayerVideoGravity",
-
     /* position: "absolute",
-    top: 0,
-    bottom: 0,
-    width: "100%",
-    height: "100%",
-    overflow: "hidden", */
+     top: 0,
+     bottom: 0,
+     width: "100%",
+     height: "100%",
+     overflow: "hidden", */
   },
+  /********************************************* */
   viewportHeader: {
     position: "relative",
     //height: "100vh",

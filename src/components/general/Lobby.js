@@ -10,6 +10,10 @@ import useWindowDimensions from "./useWindowDimensions";
 import Fade from "@material-ui/core/Fade";
 import { withStyles } from "@material-ui/core/styles";
 import { RiCloseFill } from "react-icons/ri";
+import ReactDOM from "react-dom";
+import CloseIcon from "@material-ui/icons/Close";
+//import CloseIcon from "@mui/icons-material/Close";
+
 //import { styled } from "@mui/material/styles";
 //import Dialog from "@mui/material/Dialog";
 //import DialogContent from "@mui/material/DialogContent";
@@ -29,36 +33,27 @@ function updatePointer2(makrw, makrh, imagew, imageh) {
     document.documentElement.clientHeight,
     window.innerHeight || 0
   );
+  console.log(height, "height");
 
   const neww = (makrw / imagew) * width;
   const newh = (makrh / imageh) * height;
   let obj = { X: neww, Y: newh };
+  console.log(newh, "222");
 
   const radiusw = (22 / imagew) * width;
   const radiush = (22 / imageh) * height;
+  console.log(
+    `${(obj.Y ^ 0) - radiush}px`,
+    `${(obj.X ^ 0) - radiusw}px`,
+    "res vals"
+  );
+
   return {
     top: `${(obj.Y ^ 0) - radiush}px`,
     left: `${(obj.X ^ 0) - radiusw}px`,
   };
 }
 
-/************************************Sweet alert implementation for Image Marker*********************************************** */
-//"https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg",
-
-function imagetAlert(ImageUrl) {
-  Swal.fire({
-    title: "",
-    imageUrl: ImageUrl,
-    imageWidth: "85%",
-    imageHeight: "85%",
-    imageAlt: "...",
-    showCancelButton: false,
-    showConfirmButton: false,
-    reverseButtons: true,
-    showCloseButton: true,
-    background: "#30475E",
-  });
-}
 /*********************************Dailog Implementation*************************************************** */
 // const BootstrapDialogs = styled(Dialog)(({ theme }) => ({
 //   "& .MuiDialogContent-root": {
@@ -121,6 +116,8 @@ function Lobby({ history, project }) {
   //const [pagestate, setPage] = React.useState();
   let page = project.pages.find((e) => e.id === project.homepage);
   console.log(page, "this is page");
+  const [imgClick, setImgClick] = React.useState(false);
+  console.log(imgClick, "image click");
   //console.log(pagestate, "this is page state after useEffect");
 
   // useEffect(() => {
@@ -131,12 +128,61 @@ function Lobby({ history, project }) {
   if (!page) {
     page = project.pages[0];
   }
+
+  /************************************Sweet alert implementation for Image Marker*********************************************** */
+  //"https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg",
+
+  function imagetAlert(ImageUrl) {
+    setImgClick(true);
+    Swal.fire({
+      title: "",
+      width: "40%",
+      height: "800px",
+      imageUrl: ImageUrl,
+      imageWidth: "100%",
+      imageHeight: "100%",
+      imageAlt: "...",
+      showCancelButton: false,
+      showConfirmButton: false,
+      reverseButtons: true,
+      showCloseButton: true,
+      background: "#141414",
+    }).then(function (result) {
+      console.log(result, "result res");
+      setImgClick(false);
+    });
+  }
+
+  function pdfAlert(ImageUrl) {
+    setImgClick(true);
+    Swal.fire({
+      title: "",
+      width: "40%",
+      height: "800px",
+      imageUrl: ImageUrl,
+      imageWidth: "100%",
+      imageHeight: "100%",
+      imageAlt: "...",
+      showCancelButton: false,
+      showConfirmButton: false,
+      reverseButtons: true,
+      showCloseButton: true,
+      background: "#141414",
+    }).then(function (result) {
+      console.log(result, "result res");
+      setImgClick(false);
+    });
+  }
   const classes = useStyles();
   const [tooltipIsOpen, setTooltipIsOpen] = React.useState(true);
   const [LabelIsOpen, setLabelIsOpen] = React.useState(true);
+  const [url, setUrl] = React.useState("");
+  const [pdfOpen, setPdfOpen] = React.useState(false);
+  console.log(pdfOpen, "pdf pop");
   //console.log(dailogOpen, "this is dailog open ");
 
   const handleClickOpen = () => {
+    console.log(url, "tsss");
     document.getElementById("tooltips").href = "#popup-article";
     setLabelIsOpen(false);
   };
@@ -158,7 +204,6 @@ function Lobby({ history, project }) {
 
   const [BGwidth, setBGWidth] = React.useState();
   const [BGheight, setBGHeight] = React.useState();
-  const [url, setUrl] = React.useState("");
 
   const isHover = false;
 
@@ -221,27 +266,19 @@ function Lobby({ history, project }) {
             <source src={localStorage.getItem("lobby")} type="video/mp4" />
             Your browser does not support HTML5 video.
           </video>
+          {console.log(page?.backgroundImage?.url, "page url")}
 
           <header className={classes.viewportHeader}>
             <>
               {console.log(page.markers, "these are markers of the page")}
               {page.markers
                 ? page.markers.map((item, index) => {
+                    console.log(item.destinationType, "destin type");
                     if (item.VisibileLabel) {
                       return (
                         <>
-                          <Tooltip
-                            key={index}
-                            title={
-                              <b style={{ fontSize: "1vw" }}>
-                                {item.markerLabel}
-                              </b>
-                            }
-                            placement="right"
-                            arrow
-                            open={LabelIsOpen}
-                          >
-                            <NewTooltip
+                          {pdfOpen === false ? (
+                            <Tooltip
                               key={index}
                               title={
                                 <b style={{ fontSize: "1vw" }}>
@@ -250,93 +287,114 @@ function Lobby({ history, project }) {
                               }
                               placement="right"
                               arrow
+                              open={imgClick === false ? LabelIsOpen : null}
                             >
-                              <a
-                                href="#"
-                                className={classes.pulseAnimation}
-                                id={index}
-                                id="tooltips"
-                                style={{
-                                  backgroundColor: isHover
-                                    ? project.primaryColor
-                                    : project.markerColor,
-                                  position: "relative",
+                              <NewTooltip
+                                key={index}
+                                title={
+                                  <b style={{ fontSize: "1vw" }}>
+                                    {item.markerLabel}
+                                  </b>
+                                }
+                                placement="right"
+                                arrow
+                              >
+                                <a
+                                  href="#"
+                                  className={classes.pulseAnimation}
+                                  id={index}
+                                  id="tooltips"
+                                  style={{
+                                    backgroundColor: isHover
+                                      ? project.primaryColor
+                                      : project.markerColor,
+                                    position: "fixed",
 
-                                  top: updatePointer2(
-                                    +item?.markerPosition?.split(",")[0],
-                                    +item?.markerPosition?.split(",")[1],
-                                    page?.backgroundImage?.width,
-                                    page?.backgroundImage?.height
-                                  ).top,
+                                    top: updatePointer2(
+                                      +item?.markerPosition?.split(",")[0],
+                                      +item?.markerPosition?.split(",")[1],
+                                      page?.backgroundImage?.width,
+                                      page?.backgroundImage?.height
+                                    ).top,
 
-                                  left: updatePointer2(
-                                    +item?.markerPosition?.split(",")[0],
-                                    +item?.markerPosition?.split(",")[1],
-                                    page?.backgroundImage?.width,
-                                    page?.backgroundImage?.height
-                                  ).left,
-                                }}
-                                onClick={() => {
-                                  setTooltipIsOpen(false);
-                                  let scrollDown =
-                                    document.getElementById("profile-menu");
-                                  scrollDown.style.display = "none";
-                                  /*******************************Image and Video view integration******************************************** */
-                                  // if (item.destinationType === "ImageView") {
-                                  //   setUrl(item.destinationLink);
-                                  //   imagetAlert(item.destinationLink);
-                                  // }
-                                  // if (item.destinationType === "VideoView") {
-                                  //   setUrl(item.destinationLink);
-                                  //   history.push({
-                                  //     pathname: "/roundme",
-                                  //     state: {
-                                  //       videoUrl: item.destinationLink,
-                                  //     },
-                                  //   });
-                                  // }
-                                  /************************************************************************************************************* */
-                                  if (item.destinationType === "PDF") {
-                                    setUrl(item.destinationLink);
-                                    handleClickOpen();
-                                  } else if (
-                                    item.destinationType === "ImageView"
-                                  ) {
-                                    setUrl(item.destinationLink);
-                                    imagetAlert(item.destinationLink);
-                                  } else if (
-                                    item.destinationType === "VideoView"
-                                  ) {
-                                    setUrl(item.destinationLink);
-                                    localStorage.setItem(
-                                      "videoUrl",
-                                      item.destinationLink
-                                    );
-                                    history.push({
-                                      pathname: "/roundme",
-                                    });
-                                  } else if (item.destinationType === "Link") {
-                                    window.open(item.destinationLink);
-                                  } else {
+                                    left: updatePointer2(
+                                      +item?.markerPosition?.split(",")[0],
+                                      +item?.markerPosition?.split(",")[1],
+                                      page?.backgroundImage?.width,
+                                      page?.backgroundImage?.height
+                                    ).left,
+                                  }}
+                                  onClick={() => {
+                                    setTooltipIsOpen(false);
                                     let scrollDown =
                                       document.getElementById("profile-menu");
                                     scrollDown.style.display = "none";
-                                    setLabelIsOpen(false);
-                                    setTooltipIsOpen(false);
-                                    item.TransVideo
-                                      ? setVideoNo({
-                                          no: 1,
-                                          src: item.TransVideo.url,
-                                          pageId: item.destinationPage,
-                                        })
-                                      : history.push(
-                                          `/page/${item.destinationPage}`
-                                        );
-                                  }
-                                }}
-                              ></a>
-                            </NewTooltip>
-                          </Tooltip>
+                                    /*******************************Image and Video view integration******************************************** */
+                                    // if (item.destinationType === "ImageView") {
+                                    //   setUrl(item.destinationLink);
+                                    //   imagetAlert(item.destinationLink);
+                                    // }
+                                    // if (item.destinationType === "VideoView") {
+                                    //   setUrl(item.destinationLink);
+                                    //   history.push({
+                                    //     pathname: "/roundme",
+                                    //     state: {
+                                    //       videoUrl: item.destinationLink,
+                                    //     },
+                                    //   });
+                                    // }
+                                    /************************************************************************************************************* */
+                                    if (item.destinationType === "PDF") {
+                                      setUrl(item.destinationLink);
+                                      setPdfOpen(true);
+                                      //pdfAlert(item.destinationLink);
+                                      //handleClickOpen(item.destinationLink);
+                                    } else if (
+                                      item.destinationType === "ImageView"
+                                    ) {
+                                      //console.log(item.destinationType, "immmm");
+                                      setUrl(item.destinationLink);
+                                      imagetAlert(item.destinationLink);
+                                    } else if (
+                                      item.destinationType === "VideoView"
+                                    ) {
+                                      setUrl(item.destinationLink);
+                                      localStorage.setItem(
+                                        "videoUrl",
+                                        item.destinationLink
+                                      );
+                                      history.push({
+                                        pathname: "/roundme",
+                                      });
+                                    } else if (
+                                      item.destinationType === "Link"
+                                    ) {
+                                      window.open(item.destinationLink);
+                                    } else {
+                                      console.log(
+                                        item.destinationType,
+                                        "immmm"
+                                      );
+                                      let scrollDown =
+                                        document.getElementById("profile-menu");
+                                      scrollDown.style.display = "none";
+                                      setLabelIsOpen(false);
+                                      setTooltipIsOpen(false);
+                                      item.TransVideo
+                                        ? setVideoNo({
+                                            no: 1,
+                                            src: item.TransVideo.url,
+                                            pageId: item.destinationPage,
+                                          })
+                                        : history.push(
+                                            `/page/${item.destinationPage}`
+                                          );
+                                    }
+                                  }}
+                                ></a>
+                              </NewTooltip>
+                            </Tooltip>
+                          ) : null}
                           <video
                             disablePictureInPicture
                             controls={false}
@@ -351,21 +409,8 @@ function Lobby({ history, project }) {
                     } else {
                       return (
                         <>
-                          <Tooltip
-                            key={index}
-                            title={
-                              <b style={{ fontSize: "0.8vw" }}>
-                                {item.markerLabel}
-                              </b>
-                            }
-                            placement="top"
-                            arrow
-                            leaveDelay={300}
-                            TransitionComponent={Fade}
-                            TransitionProps={{ timeout: 400 }}
-                            open={tooltipIsOpen}
-                          >
-                            <NewTooltip
+                          {pdfOpen === false ? (
+                            <Tooltip
                               key={index}
                               title={
                                 <b style={{ fontSize: "0.8vw" }}>
@@ -377,58 +422,88 @@ function Lobby({ history, project }) {
                               leaveDelay={300}
                               TransitionComponent={Fade}
                               TransitionProps={{ timeout: 400 }}
+                              open={tooltipIsOpen}
                             >
-                              <a
-                                href="#"
-                                id="tooltips"
-                                className={classes.pulseAnimation}
-                                style={{
-                                  backgroundColor: isHover
-                                    ? project.primaryColor
-                                    : project.markerColor,
-                                  position: "relative",
+                              <NewTooltip
+                                key={index}
+                                title={
+                                  <b style={{ fontSize: "0.8vw" }}>
+                                    {item.markerLabel}
+                                  </b>
+                                }
+                                placement="top"
+                                arrow
+                                leaveDelay={300}
+                                TransitionComponent={Fade}
+                                TransitionProps={{ timeout: 400 }}
+                              >
+                                <a
+                                  href="#"
+                                  id="tooltips"
+                                  className={classes.pulseAnimation}
+                                  style={{
+                                    backgroundColor: isHover
+                                      ? project.primaryColor
+                                      : project.markerColor,
+                                    position: "fixed",
 
-                                  top: updatePointer2(
-                                    +item?.markerPosition?.split(",")[0],
-                                    +item?.markerPosition?.split(",")[1],
-                                    page?.backgroundImage?.width,
-                                    page?.backgroundImage?.height
-                                  ).top,
+                                    top: updatePointer2(
+                                      +item?.markerPosition?.split(",")[0],
+                                      +item?.markerPosition?.split(",")[1],
+                                      page?.backgroundImage?.width,
+                                      page?.backgroundImage?.height
+                                    ).top,
 
-                                  left: updatePointer2(
-                                    +item?.markerPosition?.split(",")[0],
-                                    +item?.markerPosition?.split(",")[1],
-                                    page?.backgroundImage?.width,
-                                    page?.backgroundImage?.height
-                                  ).left,
-                                }}
-                                onClick={() => {
-                                  setTooltipIsOpen(false);
-                                  let scrollDown =
-                                    document.getElementById("profile-menu");
-                                  scrollDown.style.display = "none";
-                                  if (item.destinationType === "PDF") {
-                                    setUrl(item.destinationLink);
-                                    handleClickOpen();
-                                  } else if (item.destinationType === "link") {
-                                    window.open(item.destinationLink);
-                                  } else {
-                                    setLabelIsOpen(false);
+                                    left: updatePointer2(
+                                      +item?.markerPosition?.split(",")[0],
+                                      +item?.markerPosition?.split(",")[1],
+                                      page?.backgroundImage?.width,
+                                      page?.backgroundImage?.height
+                                    ).left,
+                                  }}
+                                  onClick={() => {
                                     setTooltipIsOpen(false);
-                                    item.TransVideo
-                                      ? setVideoNo({
-                                          no: 1,
-                                          src: item.TransVideo.url,
-                                          pageId: item.destinationPage,
-                                        })
-                                      : history.push(
-                                          `/page/${item.destinationPage}`
-                                        );
-                                  }
-                                }}
-                              ></a>
-                            </NewTooltip>
-                          </Tooltip>
+                                    let scrollDown =
+                                      document.getElementById("profile-menu");
+                                    scrollDown.style.display = "none";
+                                    if (item.destinationType === "PDF") {
+                                      setUrl(item.destinationLink);
+                                      setPdfOpen(true);
+                                      //pdfAlert(item.destinationLink);
+                                      //handleClickOpen(item.destinationLink);
+                                    } else if (
+                                      item.destinationType === "link"
+                                    ) {
+                                      window.open(item.destinationLink);
+                                    } else if (
+                                      item.destinationType === "VideoView"
+                                    ) {
+                                      setUrl(item.destinationLink);
+                                      localStorage.setItem(
+                                        "videoUrl",
+                                        item.destinationLink
+                                      );
+                                      history.push({
+                                        pathname: "/roundme",
+                                      });
+                                    } else {
+                                      setLabelIsOpen(false);
+                                      setTooltipIsOpen(false);
+                                      item.TransVideo
+                                        ? setVideoNo({
+                                            no: 1,
+                                            src: item.TransVideo.url,
+                                            pageId: item.destinationPage,
+                                          })
+                                        : history.push(
+                                            `/page/${item.destinationPage}`
+                                          );
+                                    }
+                                  }}
+                                ></a>
+                              </NewTooltip>
+                            </Tooltip>
+                          ) : null}
                           <video
                             disablePictureInPicture
                             controls={false}
@@ -443,6 +518,43 @@ function Lobby({ history, project }) {
                     }
                   })
                 : null}
+              {pdfOpen === true && url !== "" ? (
+                <div style={{ height: "40vh", width: "40vw" }}>
+                  <iframe
+                    src={url}
+                    frameBorder="0"
+                    scrolling="auto"
+                    style={{
+                      width: "80vw",
+                      height: "80vh",
+                      marginTop: "6%",
+                      marginLeft: "20%",
+                    }}
+                    //height="90%"
+                    //width="90%"
+                  ></iframe>
+                  <button
+                    onClick={() => {
+                      setPdfOpen(false);
+                      setLabelIsOpen(true);
+                    }}
+                    style={{
+                      zIndex: 1000,
+                      position: "fixed",
+                      top: "6.5%",
+                      left: "8%",
+                      width: 60,
+                      cursor: "pointer",
+                      backgroundColor: "black",
+                      borderWidth: "0px",
+                    }}
+                  >
+                    <CloseIcon
+                      style={{ color: "white", backgroundColor: "black" }}
+                    />
+                  </button>
+                </div>
+              ) : null}
 
               <div>
                 <div id="popup-article" class="popup">

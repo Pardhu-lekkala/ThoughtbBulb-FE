@@ -2,6 +2,9 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Pannellum } from "pannellum-react";
+import Swal from "sweetalert2";
+import "./custom.css";
+import { useEffect } from "react";
 
 const RoundMe = (props) => {
   const history = useHistory();
@@ -10,6 +13,40 @@ const RoundMe = (props) => {
   function goBack() {
     history.push("/Lobby");
     //https://conference-project-db.s3.amazonaws.com/Login_Transition_Video_1b22166559.mp4https://conference-project-db.s3.amazonaws.com/Login_Transition_Video_1b22166559.mp4
+  }
+
+  // function getValues(event) {
+  //   console.log("called");
+  //   let pan = document.getElementById("panellum");
+  //   console.log(pan);
+  //   var coords = pan.getPitch(event);
+  //   console.log(coords);
+  // }
+  // useEffect(() => {
+  //   const script = document.createElement("script");
+
+  //   script.hotSpotDebug = "true";
+  //   script.async = true;
+
+  //   document.body.appendChild(script);
+
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
+
+  // const [yaw, setYaw] = React.useState(0);
+  // const [pitch, setPitch] = React.useState(0);
+  // console.log(pitch, yaw, "these are coordinates");
+  // const panImage = React.useRef(null);
+
+  function openDaiong() {
+    Swal.fire({
+      icon: "info",
+      html: "Pannellum is built using WebGL and JavaScript</br>with a sprinkling of HTML5 and CSS3.Internally,</br>the standalone viewer parses URL parameters to</br> build a JSON-based configuration and then the</br> viewer using the JavaScript API.",
+      showCloseButton: true,
+      showConfirmButton: false,
+    });
   }
 
   return (
@@ -28,55 +65,48 @@ const RoundMe = (props) => {
             allowfullscreen
           ></iframe>
         ) : (
-          <Pannellum
-            width="100%"
-            height="100vh"
-            image={videoUrl}
-            yaw={180}
-            hfov={110}
-            maxHfov={170}
-            minHfov={30}
-            autoLoad
-            autoRotate={10}
-            orientationOnByDefault={false}
-            compass
-            draggable
-            keyboardZoom
-            mouseZoom
-            showControls
-            showFullscreenCtrl
-            showZoomCtrl
-            //image="https://pannellum.org/images/charles-street.jpg"
-            // pitch={10}
-            // yaw={180}
-            // hfov={110}
-            // autoLoad
-            // autoRotate={10}
-            // showZoomCtrl={false}
-            // compass="true"
-            // showControls={true}
-            // onLoad={() => {
-            //   console.log("image loaded");
-            // }}
-          />
+          <div>
+            <Pannellum
+              id="panellum"
+              // ref={panImage}
+              width="100%"
+              height="100vh"
+              image={videoUrl}
+              hotSpotDebug={true}
+              //handleClick={(evt, name) => getValues()}
+              //image="https://conference-project-db.s3.amazonaws.com/Lobby_JPEG_587036c164.jpg"
+              yaw={180}
+              hfov={110}
+              maxHfov={170}
+              minHfov={30}
+              autoLoad
+              autoRotate={2}
+              getViewer={true}
+              //preview="https://upload.wikimedia.org/wikipedia/commons/1/14/Background_brick_wall.jpg"
+              orientationOnByDefault={false}
+              mouseEventToCoords={true}
+              //autoRotateInactivityDelay={1}
+              compass
+              draggable
+              keyboardZoom
+              mouseZoom
+              showControls
+              showFullscreenCtrl
+              showZoomCtrl
+              // onMousedown={(evt) => {
+              //   console.log("Mouse Down", evt.mouseEventToCoords);
+              // }}
+              // onMouseup={(event) => {
+              //   setPitch(
+              //     panImage.current.getViewer().mouseEventToCoords(event)[0]
+              //   );
+              //   setYaw(
+              //     panImage.current.getViewer().mouseEventToCoords(event)[1]
+              //   );
+              // }}
+            ></Pannellum>
+          </div>
         )}
-        {/* <Pannellum.Hotspot
-              type="info"
-              text="Tooltip routed to cumulations web"
-              pitch={31}
-              yaw={150}
-              name="hs1"
-              URL="www.cumulations.com"
-            />
-            <Pannellum.Hotspot
-              type="custom"
-              text="pardhu"
-              pitch={40}
-              yaw={160}
-              handleClick={(evt, name) => history.push("/Lobby")}
-              name="hs1"
-            />
-          </Pannellum> */}
 
         <button
           onClick={() => {
