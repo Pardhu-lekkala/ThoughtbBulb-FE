@@ -329,7 +329,7 @@ function Page({ history, match, project }) {
                         }
                         placement="right"
                         arrow
-                        open={LabelIsOpen}
+                        open={imgClick === false ? LabelIsOpen : null}
                       >
                         <NewTooltip
                           key={index}
