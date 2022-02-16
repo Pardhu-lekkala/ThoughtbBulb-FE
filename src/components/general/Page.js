@@ -23,6 +23,7 @@ import { BsChevronCompactDown } from "react-icons/bs";
 import { HiOutlineUser } from "react-icons/hi";
 
 import ReactPlayer from "react-player";
+import Swal from "sweetalert2";
 
 function updatePointer2(makrw, makrh, imagew, imageh) {
   let width = Math.max(
@@ -129,6 +130,8 @@ function Page({ history, match, project }) {
   const [tooltipIsOpen, setTooltipIsOpen] = React.useState(true);
   const [LabelIsOpen, setLabelIsOpen] = React.useState(true);
   const [url, setUrl] = React.useState("");
+  const [pdfOpen, setPdfOpen] = React.useState(false);
+  const [imgClick, setImgClick] = React.useState(false);
 
   const isHover = false;
 
@@ -136,6 +139,26 @@ function Page({ history, match, project }) {
     document.getElementById("tooltips").href = "#popup-article";
     setLabelIsOpen(false);
   };
+  function imagetAlert(ImageUrl) {
+    setImgClick(true);
+    Swal.fire({
+      title: "",
+      width: "40%",
+      height: "800px",
+      imageUrl: ImageUrl,
+      imageWidth: "100%",
+      imageHeight: "100%",
+      imageAlt: "...",
+      showCancelButton: false,
+      showConfirmButton: false,
+      reverseButtons: true,
+      showCloseButton: true,
+      background: "#141414",
+    }).then(function (result) {
+      console.log(result, "result res");
+      setImgClick(false);
+    });
+  }
 
   const [videoNo, setVideoNo] = React.useState({
     no: 0,
@@ -298,81 +321,143 @@ function Page({ history, match, project }) {
               if (item.VisibileLabel) {
                 return (
                   <>
-                    <Tooltip
-                      key={index}
-                      title={
-                        <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
-                      }
-                      placement="right"
-                      arrow
-                      open={LabelIsOpen}
-                    >
-                      <NewTooltip
+                    {pdfOpen === false ? (
+                      <Tooltip
                         key={index}
                         title={
                           <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
                         }
                         placement="right"
                         arrow
+                        open={LabelIsOpen}
                       >
-                        <a
-                          href="#"
-                          className={classes.pulseAnimation}
-                          id={index}
-                          id="tooltips"
-                          style={{
-                            backgroundColor: isHover
-                              ? project.primaryColor
-                              : project.markerColor,
-                            position: "relative",
+                        <NewTooltip
+                          key={index}
+                          title={
+                            <b style={{ fontSize: "1vw" }}>
+                              {item.markerLabel}
+                            </b>
+                          }
+                          placement="right"
+                          arrow
+                        >
+                          <a
+                            href="#"
+                            className={classes.pulseAnimation}
+                            id={index}
+                            id="tooltips"
+                            style={{
+                              backgroundColor: isHover
+                                ? project.primaryColor
+                                : project.markerColor,
+                              position: "relative",
 
-                            top: updatePointer2(
-                              +item?.markerPosition?.split(",")[0],
-                              +item?.markerPosition?.split(",")[1],
-                              page?.backgroundImage?.width,
-                              page?.backgroundImage?.height
-                            ).top,
+                              top: updatePointer2(
+                                +item?.markerPosition?.split(",")[0],
+                                +item?.markerPosition?.split(",")[1],
+                                page?.backgroundImage?.width,
+                                page?.backgroundImage?.height
+                              ).top,
 
-                            left: updatePointer2(
-                              +item?.markerPosition?.split(",")[0],
-                              +item?.markerPosition?.split(",")[1],
-                              page?.backgroundImage?.width,
-                              page?.backgroundImage?.height
-                            ).left,
-                          }}
-                          onClick={() => {
-                            setTooltipIsOpen(false);
-                            let scrollDown =
-                              document.getElementById("profile-menu");
-                            scrollDown.style.display = "none";
-                            if (item.destinationType === "PDF") {
-                              setUrl(item.destinationLink);
-                              handleClickOpen();
-                            } else if (item.destinationType === "Link") {
-                              window.open(item.destinationLink);
-                            } else {
+                              left: updatePointer2(
+                                +item?.markerPosition?.split(",")[0],
+                                +item?.markerPosition?.split(",")[1],
+                                page?.backgroundImage?.width,
+                                page?.backgroundImage?.height
+                              ).left,
+                            }}
+                            onClick={() => {
+                              setTooltipIsOpen(false);
                               let scrollDown =
                                 document.getElementById("profile-menu");
                               scrollDown.style.display = "none";
-                              setLabelIsOpen(false);
-                              setTooltipIsOpen(false);
-                              if (item.TransVideo) {
-                                setVideoNo({
-                                  no: 1,
-                                  src: item.TransVideo.url,
-                                  pageId: item.destinationPage,
+                              /*******************************Image and Video view integration******************************************** */
+                              // if (item.destinationType === "ImageView") {
+                              //   setUrl(item.destinationLink);
+                              //   imagetAlert(item.destinationLink);
+                              // }
+                              // if (item.destinationType === "VideoView") {
+                              //   setUrl(item.destinationLink);
+                              //   history.push({
+                              //     pathname: "/roundme",
+                              //     state: {
+                              //       videoUrl: item.destinationLink,
+                              //     },
+                              //   });
+                              // }
+                              /************************************************************************************************************* */
+                              if (item.destinationType === "PDF") {
+                                setUrl(item.destinationLink);
+                                setPdfOpen(true);
+                                //pdfAlert(item.destinationLink);
+                                //handleClickOpen(item.destinationLink);
+                              } else if (item.destinationType === "ImageView") {
+                                //console.log(item.destinationType, "immmm");
+                                setUrl(item.destinationLink);
+                                imagetAlert(item.destinationLink);
+                              } else if (item.destinationType === "VideoView") {
+                                setUrl(item.destinationLink);
+                                localStorage.setItem(
+                                  "videoUrl",
+                                  item.destinationLink
+                                );
+                                history.push({
+                                  pathname: "/roundme",
                                 });
+                              } else if (item.destinationType === "Link") {
+                                window.open(item.destinationLink);
                               } else {
-                                history.push(`/page/${item.destinationPage}`);
-                                window.location.reload();
+                                console.log(item.destinationType, "immmm");
+                                let scrollDown =
+                                  document.getElementById("profile-menu");
+                                scrollDown.style.display = "none";
+                                setLabelIsOpen(false);
+                                setTooltipIsOpen(false);
+                                item.TransVideo
+                                  ? setVideoNo({
+                                      no: 1,
+                                      src: item.TransVideo.url,
+                                      pageId: item.destinationPage,
+                                    })
+                                  : history.push(
+                                      `/page/${item.destinationPage}`
+                                    );
                               }
+                            }}
+                            // onClick={() => {
+                            //   setTooltipIsOpen(false);
+                            //   let scrollDown =
+                            //     document.getElementById("profile-menu");
+                            //   scrollDown.style.display = "none";
+                            //   if (item.destinationType === "PDF") {
+                            //     setUrl(item.destinationLink);
+                            //     handleClickOpen();
+                            //   } else if (item.destinationType === "Link") {
+                            //     window.open(item.destinationLink);
+                            //   } else {
+                            //     let scrollDown =
+                            //       document.getElementById("profile-menu");
+                            //     scrollDown.style.display = "none";
+                            //     setLabelIsOpen(false);
+                            //     setTooltipIsOpen(false);
+                            //     if (item.TransVideo) {
+                            //       setVideoNo({
+                            //         no: 1,
+                            //         src: item.TransVideo.url,
+                            //         pageId: item.destinationPage,
+                            //       });
+                            //     } else {
+                            //       history.push(`/page/${item.destinationPage}`);
+                            //       window.location.reload();
+                            //     }
 
-                              //window.location.reload();
-                            }
-                          }}
-                        ></a>
-                      </NewTooltip>
-                    </Tooltip>
+                            //     //window.location.reload();
+                            //   }
+                            // }}
+                          ></a>
+                        </NewTooltip>
+                      </Tooltip>
+                    ) : null}
                     <video
                       disablePictureInPicture
                       controls={false}
@@ -387,80 +472,117 @@ function Page({ history, match, project }) {
               } else {
                 return (
                   <>
-                    <Tooltip
-                      key={index}
-                      title={
-                        <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
-                      }
-                      placement="right"
-                      arrow
-                      leaveDelay={300}
-                      TransitionComponent={Fade}
-                      TransitionProps={{ timeout: 400 }}
-                      open={tooltipIsOpen}
-                    >
-                      <NewTooltip
+                    {pdfOpen === false ? (
+                      <Tooltip
                         key={index}
                         title={
-                          <b style={{ fontSize: "0.8vw" }}>
-                            {item.markerLabel}
-                          </b>
+                          <b style={{ fontSize: "1vw" }}>{item.markerLabel}</b>
                         }
-                        placement="top"
+                        placement="right"
                         arrow
                         leaveDelay={300}
                         TransitionComponent={Fade}
                         TransitionProps={{ timeout: 400 }}
+                        open={tooltipIsOpen}
                       >
-                        <a
-                          href="#"
-                          id="tooltips"
-                          className={classes.pulseAnimation}
-                          style={{
-                            backgroundColor: isHover
-                              ? project.primaryColor
-                              : project.markerColor,
-                            position: "relative",
+                        <NewTooltip
+                          key={index}
+                          title={
+                            <b style={{ fontSize: "0.8vw" }}>
+                              {item.markerLabel}
+                            </b>
+                          }
+                          placement="top"
+                          arrow
+                          leaveDelay={300}
+                          TransitionComponent={Fade}
+                          TransitionProps={{ timeout: 400 }}
+                        >
+                          <a
+                            href="#"
+                            id="tooltips"
+                            className={classes.pulseAnimation}
+                            style={{
+                              backgroundColor: isHover
+                                ? project.primaryColor
+                                : project.markerColor,
+                              position: "relative",
 
-                            top: updatePointer2(
-                              +item?.markerPosition?.split(",")[0],
-                              +item?.markerPosition?.split(",")[1],
-                              page?.backgroundImage?.width,
-                              page?.backgroundImage?.height
-                            ).top,
+                              top: updatePointer2(
+                                +item?.markerPosition?.split(",")[0],
+                                +item?.markerPosition?.split(",")[1],
+                                page?.backgroundImage?.width,
+                                page?.backgroundImage?.height
+                              ).top,
 
-                            left: updatePointer2(
-                              +item?.markerPosition?.split(",")[0],
-                              +item?.markerPosition?.split(",")[1],
-                              page?.backgroundImage?.width,
-                              page?.backgroundImage?.height
-                            ).left,
-                          }}
-                          onClick={() => {
-                            setTooltipIsOpen(false);
-                            let scrollDown =
-                              document.getElementById("profile-menu");
-                            scrollDown.style.display = "none";
-                            if (item.destinationType === "PDF") {
-                              setUrl(item.destinationLink);
-                              handleClickOpen();
-                            } else if (item.destinationType === "link") {
-                              window.open(item.destinationLink);
-                            } else {
-                              setLabelIsOpen(false);
+                              left: updatePointer2(
+                                +item?.markerPosition?.split(",")[0],
+                                +item?.markerPosition?.split(",")[1],
+                                page?.backgroundImage?.width,
+                                page?.backgroundImage?.height
+                              ).left,
+                            }}
+                            onClick={() => {
                               setTooltipIsOpen(false);
-                              item.TransVideo
-                                ? setVideoNo({
-                                    no: 1,
-                                    src: item.TransVideo.url,
-                                    pageId: item.destinationPage,
-                                  })
-                                : history.push(`/page/${item.destinationPage}`);
-                            }
-                          }}
-                        ></a>
-                      </NewTooltip>
-                    </Tooltip>
+                              let scrollDown =
+                                document.getElementById("profile-menu");
+                              scrollDown.style.display = "none";
+                              if (item.destinationType === "PDF") {
+                                setUrl(item.destinationLink);
+                                setPdfOpen(true);
+                                //pdfAlert(item.destinationLink);
+                                //handleClickOpen(item.destinationLink);
+                              } else if (item.destinationType === "link") {
+                                window.open(item.destinationLink);
+                              } else if (item.destinationType === "VideoView") {
+                                setUrl(item.destinationLink);
+                                localStorage.setItem(
+                                  "videoUrl",
+                                  item.destinationLink
+                                );
+                                history.push({
+                                  pathname: "/roundme",
+                                });
+                              } else {
+                                setLabelIsOpen(false);
+                                setTooltipIsOpen(false);
+                                item.TransVideo
+                                  ? setVideoNo({
+                                      no: 1,
+                                      src: item.TransVideo.url,
+                                      pageId: item.destinationPage,
+                                    })
+                                  : history.push(
+                                      `/page/${item.destinationPage}`
+                                    );
+                              }
+                            }}
+                            // onClick={() => {
+                            //   setTooltipIsOpen(false);
+                            //   let scrollDown =
+                            //     document.getElementById("profile-menu");
+                            //   scrollDown.style.display = "none";
+                            //   if (item.destinationType === "PDF") {
+                            //     setUrl(item.destinationLink);
+                            //     handleClickOpen();
+                            //   } else if (item.destinationType === "link") {
+                            //     window.open(item.destinationLink);
+                            //   } else {
+                            //     setLabelIsOpen(false);
+                            //     setTooltipIsOpen(false);
+                            //     item.TransVideo
+                            //       ? setVideoNo({
+                            //           no: 1,
+                            //           src: item.TransVideo.url,
+                            //           pageId: item.destinationPage,
+                            //         })
+                            //       : history.push(`/page/${item.destinationPage}`);
+                            //   }
+                            // }}
+                          ></a>
+                        </NewTooltip>
+                      </Tooltip>
+                    ) : null}
                     <video
                       disablePictureInPicture
                       controls={false}
@@ -474,6 +596,44 @@ function Page({ history, match, project }) {
                 );
               }
             })}
+            {pdfOpen === true && url !== "" ? (
+              <div style={{ height: "40vh", width: "40vw" }}>
+                <iframe
+                  //src={`https://docs.google.com/viewer?url=${url}&embedded=true`}
+                  src={url}
+                  frameBorder="0"
+                  scrolling="auto"
+                  style={{
+                    width: "80vw",
+                    height: "80vh",
+                    marginTop: "6%",
+                    marginLeft: "20%",
+                  }}
+                  //height="90%"
+                  //width="90%"
+                ></iframe>
+                <button
+                  onClick={() => {
+                    setPdfOpen(false);
+                    setLabelIsOpen(true);
+                  }}
+                  style={{
+                    zIndex: 1000,
+                    position: "fixed",
+                    top: "6.5%",
+                    left: "8%",
+                    width: 60,
+                    cursor: "pointer",
+                    backgroundColor: "black",
+                    borderWidth: "0px",
+                  }}
+                >
+                  <CloseIcon
+                    style={{ color: "white", backgroundColor: "black" }}
+                  />
+                </button>
+              </div>
+            ) : null}
 
             {page.video_areas.map((item) => {
               const pointerObj = updatePointer(

@@ -521,6 +521,7 @@ function Lobby({ history, project }) {
               {pdfOpen === true && url !== "" ? (
                 <div style={{ height: "40vh", width: "40vw" }}>
                   <iframe
+                    //src={`https://docs.google.com/viewer?url=${url}&embedded=true`}
                     src={url}
                     frameBorder="0"
                     scrolling="auto"
