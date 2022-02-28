@@ -5,6 +5,7 @@ import { Pannellum } from "pannellum-react";
 import Swal from "sweetalert2";
 import "./custom.css";
 import { useEffect } from "react";
+import { Tooltip } from "@material-ui/core";
 
 const RoundMe = (props) => {
   const history = useHistory();
@@ -35,10 +36,14 @@ const RoundMe = (props) => {
   //   };
   // }, []);
 
-  // const [yaw, setYaw] = React.useState(0);
-  // const [pitch, setPitch] = React.useState(0);
-  // console.log(pitch, yaw, "these are coordinates");
-  // const panImage = React.useRef(null);
+  const [yaw, setYaw] = React.useState(0);
+  const [pitch, setPitch] = React.useState(0);
+  console.log(pitch, yaw, "these are coordinates");
+  const panImage = React.useRef(null);
+  const [image, setImage] = React.useState(
+    "https://thumbs.dreamstime.com/z/moscow-russia-november-shop-goods-extreme-sports-d-spherical-panorama-viewing-angle-moscow-russia-december-shop-sporting-goods-107433981.jpg"
+  );
+  const [imageChange, setImageChange] = React.useState(false);
 
   function openDaiong() {
     Swal.fire({
@@ -68,13 +73,12 @@ const RoundMe = (props) => {
           <div>
             <Pannellum
               id="panellum"
-              // ref={panImage}
               width="100%"
+              ref={panImage}
               height="100vh"
-              image={videoUrl}
+              //image={videoUrl}
+              image={image}
               hotSpotDebug={true}
-              //handleClick={(evt, name) => getValues()}
-              //image="https://conference-project-db.s3.amazonaws.com/Lobby_JPEG_587036c164.jpg"
               yaw={180}
               hfov={110}
               maxHfov={170}
@@ -82,10 +86,8 @@ const RoundMe = (props) => {
               autoLoad
               autoRotate={2}
               getViewer={true}
-              //preview="https://upload.wikimedia.org/wikipedia/commons/1/14/Background_brick_wall.jpg"
               orientationOnByDefault={false}
               mouseEventToCoords={true}
-              //autoRotateInactivityDelay={1}
               compass
               draggable
               keyboardZoom
@@ -93,18 +95,45 @@ const RoundMe = (props) => {
               showControls
               showFullscreenCtrl
               showZoomCtrl
-              // onMousedown={(evt) => {
-              //   console.log("Mouse Down", evt.mouseEventToCoords);
-              // }}
-              // onMouseup={(event) => {
-              //   setPitch(
-              //     panImage.current.getViewer().mouseEventToCoords(event)[0]
-              //   );
-              //   setYaw(
-              //     panImage.current.getViewer().mouseEventToCoords(event)[1]
-              //   );
-              // }}
-            ></Pannellum>
+              onMouseup={(event) => {
+                setPitch(
+                  panImage.current.getViewer().mouseEventToCoords(event)[0]
+                );
+                setYaw(
+                  panImage.current.getViewer().mouseEventToCoords(event)[1]
+                );
+              }}
+            >
+              <Pannellum.Hotspot
+                type="info"
+                text="Clothing"
+                pitch={0.7443754612679627}
+                yaw={165.0303762778178}
+                name="hs1"
+                //URL="www.cumulations.com"
+              />
+              <Pannellum.Hotspot
+                type="info"
+                text="Footware"
+                pitch={0.041750443614095654}
+                yaw={133.7209172306363}
+                name="hs1"
+                //URL="www.cumulations.com"
+              />
+
+              <Pannellum.Hotspot
+                type="custom"
+                text="pardhu"
+                pitch={9.755711165305666}
+                yaw={-156.5383286097341}
+                handleClick={(evt, name) => {
+                  setImage("https://pannellum.org/images/alma.jpg");
+                  setPitch(-9.073001777039018);
+                  setYaw(-179.6678737022982);
+                }}
+                name="hs1"
+              />
+            </Pannellum>
           </div>
         )}
 
