@@ -41,7 +41,9 @@ const RoundMe = (props) => {
   console.log(pitch, yaw, "these are coordinates");
   const panImage = React.useRef(null);
   const [image, setImage] = React.useState(
-    "https://thumbs.dreamstime.com/z/moscow-russia-november-shop-goods-extreme-sports-d-spherical-panorama-viewing-angle-moscow-russia-december-shop-sporting-goods-107433981.jpg"
+    "https://thumbs.dreamstime.com/z/minsk-belarus-december-full-degree-panorama-equirectangular-spherical-projection-shop-stylish-shoes-vr-content-138851430.jpg"
+    //"https://thumbs.dreamstime.com/b/brand-new-interior-cloth-store-luxury-fashionable-47260857.jpg"
+    //"https://thumbs.dreamstime.com/z/moscow-russia-november-shop-goods-extreme-sports-d-spherical-panorama-viewing-angle-moscow-russia-december-shop-sporting-goods-107433981.jpg"
   );
   const [imageChange, setImageChange] = React.useState(false);
 
@@ -115,8 +117,8 @@ const RoundMe = (props) => {
               <Pannellum.Hotspot
                 type="info"
                 text="Footware"
-                pitch={0.041750443614095654}
-                yaw={133.7209172306363}
+                pitch={9.194244140086639}
+                yaw={177.26987709068416}
                 name="hs1"
                 //URL="www.cumulations.com"
               />
@@ -127,9 +129,10 @@ const RoundMe = (props) => {
                 pitch={9.755711165305666}
                 yaw={-156.5383286097341}
                 handleClick={(evt, name) => {
-                  setImage("https://pannellum.org/images/alma.jpg");
-                  setPitch(-9.073001777039018);
-                  setYaw(-179.6678737022982);
+                  //setImage("https://pannellum.org/images/alma.jpg");
+                  setImage(
+                    "https://thumbs.dreamstime.com/b/brand-new-interior-cloth-store-luxury-fashionable-47260857.jpg"
+                  );
                 }}
                 name="hs1"
               />
